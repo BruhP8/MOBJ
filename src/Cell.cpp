@@ -351,7 +351,3 @@ namespace Netlist {
 
 
 }  // Netlist namespace.
-
-
-
-// test
