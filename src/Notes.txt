@@ -1,0 +1,13 @@
+Notes sur Projet MOBJ :
+
+#Cell :
+- On crée toujours une Cell qui a un nom unique 
+  (c'est testé à chaque création de Cell)
+- Tout opération d'ajout d'un objet dans la Cell est testé.
+  -> On ne peut pas avoir deux objets de noms identique dans une même Cell
+- Les opérations de connection d'un Net est géré par la Cell lorsque 
+  ce Net est créé de manière indépendante
+- La méthode toXml de cette classe appelle de manière récursive la méthode
+  toXml de chacun de ses composants
+
+#Instance :
