@@ -8,7 +8,7 @@
 
  #find_package(LibXml2)
  
- set (CMAKE_CXX_FLAGS            "-Wall -g" CACHE STRING "C++ Compiler Release options." FORCE)
+ set (CMAKE_CXX_FLAGS            "-Wall -g -std=c++11" CACHE STRING "C++ Compiler Release options." FORCE)
  set (CMAKE_INSTALL_PREFIX       "../install" )
 
      include_directories( ${SCHEMATIC_SOURCE_DIR}
