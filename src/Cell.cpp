@@ -2,6 +2,7 @@
 
 #include  <cstdlib>
 #include  <iostream>
+#include  <fstream>
 #include  <libxml/xmlreader.h>
 #include  "Cell.h"
 #include  "Term.h"
@@ -333,10 +334,10 @@ namespace Netlist {
   
   void  Cell::save () const
   {
-    //string  fileName   = getName() + ".xml";
-    string  str   = getName()+".xml";
-    const char* fchar = str.c_str();
+    string  fileName   = getName() + ".xml";
+    const char* fchar = fileName.c_str();
     fstream fileStream ( fchar, ios_base::out | ios_base::trunc );
+    
     if (not fileStream.good()) {
       cerr << "[ERROR] Cell::save() unable to open file <" << fileName << ">." << endl;
       return;
