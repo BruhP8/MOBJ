@@ -168,7 +168,7 @@ namespace Netlist {
 
   // Cell::toXml() à écrire ici...
   
-  void Cell::toXml(ostream& os) {
+  void Cell::toXml(ostream& os) const{
     Indentation ind;
     os << "Construction du modele <"+name_+">" << endl;
     os << "<?xml version=\"1.0\"?>" << endl;

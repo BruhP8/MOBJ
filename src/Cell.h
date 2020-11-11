@@ -42,7 +42,7 @@ namespace Netlist {
                    void                    remove            ( Net* );
                    bool                    connect           ( const std::string& name, Net* net );
                    unsigned int            newNetId          ();
-                   void                    toXml             ( std::ostream& os );
+                   void                    toXml             ( std::ostream& os ) const;
                    Cell*                   load              ( const std::string& cellName );
                    void                    save              () const;
 
