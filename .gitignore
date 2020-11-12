@@ -31,9 +31,10 @@
 *.out
 *.app
 
-build/*
-install/*
+build
+install
 src/CMList45/CMakeFiles/*
 src/CMList45/cmake_install.cmake
 src/CMList45/CMakeCache.txt
 src/CMList45/Makefile
+.vscode/
