@@ -6,7 +6,7 @@
 #include <iosfwd>
 #include <string>
 #include <vector>
-#include <libxml2/xmlreader.h>
+#include <libxml/xmlreader.h>
 #include "Indentation.h"
 #include "XmlUtil.h"
 

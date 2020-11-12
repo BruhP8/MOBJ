@@ -3,7 +3,7 @@
 #include  <cstdlib>
 #include  <iostream>
 #include  <fstream>
-#include  <libxml2/xmlreader.h>
+#include  <libxml/xmlreader.h>
 #include  "Cell.h"
 #include  "Term.h"
 #include  "Net.h"
