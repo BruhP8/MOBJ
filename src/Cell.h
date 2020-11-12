@@ -6,7 +6,7 @@
 #include <iosfwd>
 #include <string>
 #include <vector>
-#include <libxml/xmlreader.h>
+#include <libxml2/xmlreader.h>
 #include "Indentation.h"
 #include "XmlUtil.h"
 
@@ -23,6 +23,7 @@ namespace Netlist {
       static       std::vector<Cell*>&     getAllCells       ();
       static       Cell*                   find              ( const std::string& );
       static       Cell*                   fromXml           (xmlTextReaderPtr);
+      static       Cell*                   load              ( const std::string& cellName );
     public:
                                            Cell              ( const std::string& );
                                           ~Cell              ();
@@ -43,7 +44,7 @@ namespace Netlist {
                    bool                    connect           ( const std::string& name, Net* net );
                    unsigned int            newNetId          ();
                    void                    toXml             ( std::ostream& os ) const;
-                   Cell*                   load              ( const std::string& cellName );
+                   
                    void                    save              () const;
 
     private:

@@ -6,14 +6,14 @@
  cmake_minimum_required(VERSION 2.8.0)
  project(SCHEMATIC)
 
+# Detection de LibXml2
  find_package(LibXml2)
  
  set (CMAKE_CXX_FLAGS            "-Wall -g" CACHE STRING "C++ Compiler Release options." FORCE)
  set (CMAKE_INSTALL_PREFIX       "../install" )
 
-     include_directories( ${SCHEMATIC_SOURCE_DIR}
-                          ${LIBXML2_INCLUDE_DIR}
-                        )
+# Trouver les includes de LibXml2.
+     include_directories( ${SCHEMATIC_SOURCE_DIR} ${LIBXML2_INCLUDE_DIR} )
 
                      set( includes     Indentation.h
                                        Term.h
@@ -22,6 +22,7 @@
                                        Point.h
                                        Node.h
                                        Cell.h
+                                       XmlUtil.h
                         )
 
                      set( cpps         Indentation.cpp
@@ -31,11 +32,15 @@
                                        Point.cpp
                                        Node.cpp
                                        Cell.cpp
+                                       XmlUtil.cpp
                                        Main6.cpp
                         )
 
-         add_executable ( tme6         ${cpps} )
-                install ( TARGETS      tme6         DESTINATION bin )
-                install ( FILES        ${includes}  DESTINATION include )
+   
+# Faire l'edition de liens avec la LibXml2.
+       add_executable ( tme6 ${cpps} )
+target_link_libraries ( tme6 ${LIBXML2_LIBRARIES} )
+              install ( TARGETS      tme6         DESTINATION bin )
+              install ( FILES        ${includes}  DESTINATION include )
 
-  target_link_libraries ( tme6         ${LIBXML2_LIBRAIRIES} )
+  

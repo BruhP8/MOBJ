@@ -110,5 +110,8 @@ namespace Netlist {
        << "\" y=\"" << position_.getY() << "\" />" << endl;
   }
 
+  Instance* Instance::fromXml ( Cell* cell, xmlTextReaderPtr reader ){
+    return NULL;
+  }
 
 }

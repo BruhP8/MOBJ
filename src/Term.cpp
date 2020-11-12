@@ -148,7 +148,7 @@ namespace Netlist {
     os << "<term name=\"" << name_ << "\" direction=\"" << dir << "\"/>" << endl;
   }
   
-  Term*  fromXml ( Cell* cell, xmlTextReaderPtr reader )
+  Term*  Term::fromXml ( Cell* cell, xmlTextReaderPtr reader )
   {
     return new Term( cell, "pilou", Term::Tristate );
   }
