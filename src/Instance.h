@@ -1,3 +1,7 @@
+/* Projet MOBJ                                  *
+ * Auteurs : Clément Dupuy et Nicolas Legoueix  *
+ * TME 4, 5 et 6                                */
+
 #ifndef   NETLIST_INSTANCE_H
 #define   NETLIST_INSTANCE_H
 

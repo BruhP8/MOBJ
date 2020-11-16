@@ -1,3 +1,7 @@
+/* Projet MOBJ                                  *
+ * Auteurs : Clément Dupuy et Nicolas Legoueix  *
+ * TME 4, 5 et 6                                */
+
 // -*- explicit-buffer-name: "Main.cpp<M1-MOBJ/4-5>" -*-
 
 #include <libxml/xmlreader.h>

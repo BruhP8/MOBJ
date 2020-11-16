@@ -1,3 +1,7 @@
+/* Projet MOBJ                                  *
+ * Auteurs : Clément Dupuy et Nicolas Legoueix  *
+ * TME 4, 5 et 6                                */
+
 #include "Instance.h"
 #include "Net.h"
 

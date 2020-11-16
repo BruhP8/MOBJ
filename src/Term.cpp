@@ -1,5 +1,8 @@
 #include "Term.h"
 #include "Net.h"
+#include "XmlUtil.h"
+#include <libxml/xmlreader.h>
+
 
 namespace Netlist {
   
@@ -148,9 +151,59 @@ namespace Netlist {
     os << "<term name=\"" << name_ << "\" direction=\"" << dir << "\"/>" << endl;
   }
   
+  /*------------------------------------------------------------------*
+   * Initialise un Term à partir du contenu du fichier xml :          *
+   * - parcours le contenu du fichier xml en cherchant les composants *
+   *   du Term à construire                                           *
+   * STATUS   --   DONE                                               *
+   *------------------------------------------------------------------*/
+
   Term*  Term::fromXml ( Cell* cell, xmlTextReaderPtr reader )
   {
-    return new Term( cell, "pilou", Term::Tristate );
+    //const xmlChar* termTag = xmlTextReaderConstString( reader, (const xmlChar*)"term" ); 
+    const xmlChar* dirIn   = xmlTextReaderConstString( reader, (const xmlChar*)"In"   );
+    const xmlChar* dirOut  = xmlTextReaderConstString( reader, (const xmlChar*)"Out"  );
+
+
+    Term* term = NULL;
+
+    while ( true ) {
+
+      switch ( xmlTextReaderNodeType(reader) ){
+        case  XML_READER_TYPE_COMMENT:
+        case  XML_READER_TYPE_WHITESPACE:
+        case  XML_READER_TYPE_SIGNIFICANT_WHITESPACE:
+          continue;
+      }
+
+      string termName = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"name" ) );
+      const xmlChar* direct   = xmlTextReaderGetAttribute( reader, (const xmlChar*)"direction" );
+      Direction dir;
+      if (direct == dirIn) {
+        dir = Direction::In;
+      } else if (direct == dirOut) {
+        dir = Direction::Out;
+      }
+
+      const xmlChar* x_value  = xmlTextReaderGetAttribute( reader, (const xmlChar*)"x" );    
+      const xmlChar* y_value  = xmlTextReaderGetAttribute( reader, (const xmlChar*)"y" );    
+      int x, y;
+      if ( *x_value >= '0' && *x_value <= '9' ){
+        x = (int)*x_value;
+      } 
+      if ( *y_value >= '0' && *y_value <= '0' ){
+        y = (int)*y_value;
+      }
+
+
+      term = new Term(cell, termName, dir);
+
+      term->setPosition(x, y);
+
+    }
+
+    return term;
+
   }
 
 

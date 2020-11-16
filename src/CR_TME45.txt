@@ -1,0 +1,10 @@
+Clément Dupuy
+Nicolas Legoueix
+
+UE MOBJ
+
+Compte-rendu TME4-5:
+
+Création des classes Instance, Net, Term
+Création des méthodes toXml()
+Modification du main avec l'instanciation du modèle du fulladder
