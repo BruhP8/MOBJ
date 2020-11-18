@@ -41,29 +41,43 @@ namespace Netlist {
   }
 
   bool Node::fromXml (Net * net, xmlTextReaderPtr reader){
+    bool retval = true;
+    Term * toFind;
+    Node * newNode = NULL;
 
-    const xmlChar* nodeTag = xmlTextReaderConstString(reader, (const xmlChar*)"node");
-
-    bool retval = false;
-
-    int status = xmlTextReaderRead(reader);
-    if (status != 1) {
-        if (status != 0) {
-            cerr << "[ERROR] Cell::fromXml(): Unexpected termination of the XML parser." << endl;
-        }
-        return retval;
+    switch ( xmlTextReaderNodeType(reader) ) {
+        case XML_READER_TYPE_COMMENT:
+        case XML_READER_TYPE_WHITESPACE:
+        case XML_READER_TYPE_SIGNIFICANT_WHITESPACE:
+            break;
     }
     
-    const xmlChar* nodeName = xmlTextReaderConstLocalName( reader );
+    string term = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"term"));
+    string id = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"id"));
+    string instance = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"instance"));
 
-    if(nodeName == nodeTag){
-        string term = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"term"));
-        string instance = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"instance"));
-        string id = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"id"));
-        cerr << "found node connected to term " << term << " of instance " << instance << " and id " << id << endl;
-        retval = true;
+    if(not instance.empty()){
+        // Instance provided, find the term using the instance.
+        Instance * owner;
+        owner = net->getCell()->getInstance(instance);
+        toFind = owner->getTerm(term);
+        if(toFind == NULL){
+            retval = false;
+            cerr << "[ERROR] Node::fromXml : Could not find term named " << term <<" in instance "<<instance << endl;
+        }
+    } else{
+        // No instance provided, find the Term using the net's owner cell
+        Cell * owner;
+        owner = net->getCell();
+        toFind = owner->getTerm(term);
+        if(toFind == NULL){
+            retval = false;
+            cerr << "[ERROR] Node::fromXml : Could not find term named " << term <<" in Cell "<<owner->getName() << endl;
+        } 
     }
-    return retval; // TODO
+    newNode = new Node(toFind, atoi(id.c_str()));
+    net->add(newNode);
+    return retval;
   }
 
 }  // Netlist namespace.
