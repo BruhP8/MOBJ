@@ -148,7 +148,8 @@ namespace Netlist {
         dir = "Unknown";
       }
     }
-    os << "<term name=\"" << name_ << "\" direction=\"" << dir << "\"/>" << endl;
+    os << "<term name=\"" << name_ << "\" direction=\"" << dir << " x=\"" 
+       << getPosition().getX() << "\" y=\"" << getPosition().getY() << "\"/>" << endl;
   }
   
   /*------------------------------------------------------------------*
@@ -160,47 +161,52 @@ namespace Netlist {
 
   Term*  Term::fromXml ( Cell* cell, xmlTextReaderPtr reader )
   {
-    //const xmlChar* termTag = xmlTextReaderConstString( reader, (const xmlChar*)"term" ); 
-    const xmlChar* dirIn   = xmlTextReaderConstString( reader, (const xmlChar*)"In"   );
-    const xmlChar* dirOut  = xmlTextReaderConstString( reader, (const xmlChar*)"Out"  );
-
+    const xmlChar* dirTag   = xmlTextReaderConstString( reader, (const xmlChar*)"direction" );
 
     Term* term = NULL;
 
-    while ( true ) {
-
-      switch ( xmlTextReaderNodeType(reader) ){
-        case  XML_READER_TYPE_COMMENT:
-        case  XML_READER_TYPE_WHITESPACE:
-        case  XML_READER_TYPE_SIGNIFICANT_WHITESPACE:
-          continue;
-      }
-
-      string termName = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"name" ) );
-      const xmlChar* direct   = xmlTextReaderGetAttribute( reader, (const xmlChar*)"direction" );
-      Direction dir;
-      if (direct == dirIn) {
-        dir = Direction::In;
-      } else if (direct == dirOut) {
-        dir = Direction::Out;
-      }
-
-      const xmlChar* x_value  = xmlTextReaderGetAttribute( reader, (const xmlChar*)"x" );    
-      const xmlChar* y_value  = xmlTextReaderGetAttribute( reader, (const xmlChar*)"y" );    
-      int x, y;
-      if ( *x_value >= '0' && *x_value <= '9' ){
-        x = (int)*x_value;
-      } 
-      if ( *y_value >= '0' && *y_value <= '0' ){
-        y = (int)*y_value;
-      }
-
-
-      term = new Term(cell, termName, dir);
-
-      term->setPosition(x, y);
-
+    switch ( xmlTextReaderNodeType(reader) ){
+      case  XML_READER_TYPE_COMMENT:
+      case  XML_READER_TYPE_WHITESPACE:
+      case  XML_READER_TYPE_SIGNIFICANT_WHITESPACE:
+            break;
     }
+
+    string termName = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"name" ));
+    if(termName.empty()){
+      cerr << "[ERROR] Term::fromXml(): Name is empty" << endl;
+      return term;
+    }
+
+    string directName;
+    Direction dir;
+
+    directName = xmlCharToString( xmlTextReaderGetAttribute( reader, dirTag ));
+    if (directName == "In"){
+      dir = Direction::In;
+    } 
+    else if (directName == "Out")
+    {
+      dir = Direction::Out;
+    } 
+    else 
+    {
+      cerr << "[ERROR] Term::fromXml() : no Direction found" << endl;
+      return term;
+    }
+  
+    string x_value  = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"x" ));    
+    string y_value  = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"y" ));    
+
+
+    int x, y;
+      
+    x = atoi(x_value.c_str());
+    y = atoi(y_value.c_str());
+
+    term = new Term(cell, termName, dir);
+
+    term->setPosition(x, y);
 
     return term;
 

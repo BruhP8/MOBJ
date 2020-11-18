@@ -111,11 +111,44 @@ namespace Netlist {
   {
     os << "<instance name=\"" << name_ << "\" mastercell=\"" 
        << masterCell_->getName() << "\" x=\"" << position_.getX() 
-       << "\" y=\"" << position_.getY() << "\" />" << endl;
+       << "\" y=\"" << position_.getY() << "\"/>" << endl;
   }
 
   Instance* Instance::fromXml ( Cell* cell, xmlTextReaderPtr reader ){
-    return NULL;
+    
+    Instance* instance = NULL;
+    
+    switch( xmlTextReaderNodeType(reader) ){
+      case  XML_READER_TYPE_COMMENT :  
+      case  XML_READER_TYPE_WHITESPACE :
+      case  XML_READER_TYPE_SIGNIFICANT_WHITESPACE :
+            break; 
+    }
+
+    string instName = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"name" ) );
+    cout << "Instance name : " << instName << endl;
+    if( instName.empty() ){
+      cerr << "[ERROR] Instance::fromXml(): name is empty" << endl;
+      return instance;
+    }
+
+    string cellName = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"mastercell" ) );
+    cout << "MasterCell : " << cellName << endl;
+    Cell* masterCell = Cell::find(cellName);
+    if (masterCell == NULL){
+      cerr << "[ERROR] Instance::fromXml(): no masterCell found" << endl;
+    }
+
+
+    string x_value = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"x" ) );
+    string y_value = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"y" ) );
+    int x = atoi(x_value.c_str());
+    int y = atoi(y_value.c_str());
+
+    instance = new Instance( cell, masterCell, instName );
+    instance->setPosition(x, y);
+
+    return instance;
   }
 
 }
