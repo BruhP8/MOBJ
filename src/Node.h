@@ -5,9 +5,10 @@
 
 #include <iostream>
 #include <vector>
+#include  <libxml/xmlreader.h>
 #include "Indentation.h"
 #include "Point.h"
-
+#include  "XmlUtil.h"
 
 namespace Netlist {
 
@@ -29,6 +30,7 @@ namespace Netlist {
       inline  Term*   getTerm     () const;
       inline  void    setId       ( size_t );
               void    toXml       ( std::ostream& );
+              bool    fromXml     (Net *, xmlTextReaderPtr);
     private:
                       Node        ( const Node& );
               Node&   operator=   ( const Node& );
