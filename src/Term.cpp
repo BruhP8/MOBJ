@@ -161,7 +161,6 @@ namespace Netlist {
 
   Term*  Term::fromXml ( Cell* cell, xmlTextReaderPtr reader )
   {
-    const xmlChar* dirTag   = xmlTextReaderConstString( reader, (const xmlChar*)"direction" );
 
     Term* term = NULL;
 
@@ -181,7 +180,7 @@ namespace Netlist {
     string directName;
     Direction dir;
 
-    directName = xmlCharToString( xmlTextReaderGetAttribute( reader, dirTag ));
+    directName = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"direction" ));
     if (directName == "In"){
       dir = Direction::In;
     } 
