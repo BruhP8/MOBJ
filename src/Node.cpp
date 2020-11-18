@@ -40,5 +40,30 @@ namespace Netlist {
        << "\" y=\"" << position_.getY() << "\"/>"<< endl;
   }
 
+  bool Node::fromXml (Net * net, xmlTextReaderPtr reader){
+
+    const xmlChar* nodeTag = xmlTextReaderConstString(reader, (const xmlChar*)"node");
+
+    bool retval = false;
+
+    int status = xmlTextReaderRead(reader);
+    if (status != 1) {
+        if (status != 0) {
+            cerr << "[ERROR] Cell::fromXml(): Unexpected termination of the XML parser." << endl;
+        }
+        return retval;
+    }
+    
+    const xmlChar* nodeName = xmlTextReaderConstLocalName( reader );
+
+    if(nodeName == nodeTag){
+        string term = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"term"));
+        string instance = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"instance"));
+        string id = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"id"));
+        cerr << "found node connected to term " << term << " of instance " << instance << " and id " << id << endl;
+        retval = true;
+    }
+    return retval; // TODO
+  }
 
 }  // Netlist namespace.
