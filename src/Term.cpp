@@ -164,6 +164,9 @@ namespace Netlist {
 
     Term* term = NULL;
 
+//    const xmlChar* nodeName = xmlTextReaderConstLocalName( reader );
+//    cout << "We are in <" << nodeName << ">" << endl;
+
     switch ( xmlTextReaderNodeType(reader) ){
       case  XML_READER_TYPE_COMMENT:
       case  XML_READER_TYPE_WHITESPACE:
@@ -181,15 +184,20 @@ namespace Netlist {
     Direction dir;
 
     directName = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"direction" ));
+    
     if (directName == "In"){
       dir = Direction::In;
-    } 
-    else if (directName == "Out")
-    {
+    } else if (directName == "Out"){
       dir = Direction::Out;
-    } 
-    else 
-    {
+    } else if (directName == "Inout"){
+      dir = Direction::Inout;
+    } else if (directName == "Tristate"){
+      dir = Direction::Tristate;
+    } else if (directName == "Transcv"){
+      dir = Direction::Transcv;
+    } else if (directName == "Unknown"){
+      dir = Direction::Unknown;
+    } else {
       cerr << "[ERROR] Term::fromXml() : no Direction found" << endl;
       return term;
     }

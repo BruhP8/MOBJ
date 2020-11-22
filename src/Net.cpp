@@ -4,6 +4,7 @@
 
 #include "Net.h"
 #include "Node.h"
+#include "Instance.h"
 
 namespace Netlist {
   
@@ -126,22 +127,98 @@ namespace Netlist {
     ++ind;
     ++ind;
     ++ind;
-    //++ind;
-    //++ind;
     for ( Node* inode : nodes_ ){
-      os << ind;
-      inode->toXml(os);
+      if (inode != NULL){
+        os << ind;
+        inode->toXml(os);
+      }
     }
     --ind;
-    //--ind;
-    //--ind;
     os << ind << "</net>" << endl;
   }
 
 
   Net* Net::fromXml ( Cell* cell, xmlTextReaderPtr reader )
   {
-    return new Net(cell, "plop", Term::Internal);
+    enum NetState { Init      = 0
+                  , BeginNet
+                  , EndNet
+                  };
+
+    const xmlChar* netTag = xmlTextReaderConstString( reader, (const xmlChar*)"net" );
+
+    Net* net       = NULL;
+    NetState state = Init;
+
+    while(true){
+
+      int status = xmlTextReaderRead(reader);
+      if (status != 1) {
+        if (status != 0) {
+          cerr << "[ERROR] Net::fromXml(): Unexpected termination of the XML parser." << endl;
+        }
+        break;
+      }
+
+      switch ( xmlTextReaderNodeType(reader) ){
+        case  XML_READER_TYPE_COMMENT:
+        case  XML_READER_TYPE_WHITESPACE:
+        case  XML_READER_TYPE_SIGNIFICANT_WHITESPACE:
+          continue;
+      }
+
+      const xmlChar* nodeName = xmlTextReaderConstLocalName( reader );
+
+      /*A déboguer*/
+      switch ( state ) {
+        case Init:
+          if (nodeName == netTag){
+            cout << "Chouette !" << endl;
+            string netName = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"name" ));
+            if (netName.empty()){
+              cerr << "[ERROR] Net::fromXml(): empty name" << endl;
+              return net;
+            }
+            string typeStr = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"type" ));
+            if (typeStr.empty()){
+              cerr << "[ERROR] Net::fromXml(): empty type attribute" << endl;
+              return net;
+            }
+            Term::Type type;
+            if (typeStr == "Internal"){
+              type = Term::Type::Internal;
+            } else if (typeStr == "External"){
+              type = Term::Type::External;
+            } else {
+              cerr << "[ERROR] Net::fromXml(): incorrect type" << endl;
+              return NULL;
+            }
+            net = new Net(cell, netName, type);
+            state = EndNet;
+            continue;
+          }
+          break;
+        case EndNet:
+          if ( (nodeName == netTag) and (xmlTextReaderNodeType(reader) == XML_READER_TYPE_END_ELEMENT) ){
+            continue;
+          } else {
+            if (Node::fromXml(net, reader)) continue;
+            
+          }
+      /*----------*/
+        default: 
+          break;
+        
+      }
+      //cerr << "[ERROR] Net::fromXml(): Unknow or misplaced tag <" << nodeName
+      //     << "> (line" << xmlTextReaderGetParserLineNumber(reader) << ")." << endl;
+
+     // break;
+
+    }
+    return net;
+
   }
+
 
 }

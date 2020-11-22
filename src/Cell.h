@@ -22,7 +22,7 @@ namespace Netlist {
     public:
       static       std::vector<Cell*>&     getAllCells       ();
       static       Cell*                   find              ( const std::string& );
-      static       Cell*                   fromXml           (xmlTextReaderPtr);
+      static       Cell*                   fromXml           ( xmlTextReaderPtr );
       static       Cell*                   load              ( const std::string& cellName );
     public:
                                            Cell              ( const std::string& );

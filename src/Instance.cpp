@@ -126,14 +126,14 @@ namespace Netlist {
     }
 
     string instName = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"name" ) );
-    cout << "Instance name : " << instName << endl;
+    //cout << "Instance name : " << instName << endl;
     if( instName.empty() ){
       cerr << "[ERROR] Instance::fromXml(): name is empty" << endl;
       return instance;
     }
 
     string cellName = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"mastercell" ) );
-    cout << "MasterCell : " << cellName << endl;
+    //cout << "MasterCell : " << cellName << endl;
     Cell* masterCell = Cell::find(cellName);
     if (masterCell == NULL){
       cerr << "[ERROR] Instance::fromXml(): no masterCell found" << endl;
