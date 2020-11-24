@@ -148,7 +148,7 @@ namespace Netlist {
         dir = "Unknown";
       }
     }
-    os << "<term name=\"" << name_ << "\" direction=\"" << dir << " x=\"" 
+    os << "<term name=\"" << name_ << "\" direction=\"" << dir << "\" x=\"" 
        << getPosition().getX() << "\" y=\"" << getPosition().getY() << "\"/>" << endl;
   }
   
@@ -163,9 +163,6 @@ namespace Netlist {
   {
 
     Term* term = NULL;
-
-//    const xmlChar* nodeName = xmlTextReaderConstLocalName( reader );
-//    cout << "We are in <" << nodeName << ">" << endl;
 
     switch ( xmlTextReaderNodeType(reader) ){
       case  XML_READER_TYPE_COMMENT:

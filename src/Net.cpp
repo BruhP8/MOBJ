@@ -71,23 +71,31 @@ namespace Netlist {
   /*------------------------------------------------------------------*
    * Pour ajouter un Node dans la liste :                             *
    * - on récupère le premier id libre dans le tableau                *
-   * - nd prend cet identifiant et est ajouté à la case correspondate *
+   * - nd prend cet identifiant et est ajouté à la case correspondante*
    * STATUS   --   DONE                                               *
    *------------------------------------------------------------------*/
   void  Net::add  ( Node* nd )
   {
-    size_t nd_id = getFreeNodeId();
+    //size_t nd_id = getFreeNodeId();
+    size_t nd_id = nd->getId();
     if( nodes_.empty() ){
       nd -> setId(0);
       nodes_.push_back(nd);
     }
-    if( nd_id < nodes_.size() ){
+    /*if( nd_id < nodes_.size() ){
       nd -> setId ( nd_id ) ;
       nodes_[nd_id] = nd;
-    }
+    }*/
     else {
-      nd -> setId(nodes_.size());
-      nodes_.push_back(nd);
+      /*nd -> setId(nodes_.size());
+      nodes_.push_back(nd);*/
+      for( vector<Node*>::iterator inode = nodes_.begin();
+           inode != nodes_.end(); ++inode ){
+        size_t iid = (*inode)->getId();
+        if (nd_id < iid){
+          nodes_.insert(inode, nd);
+        }
+      } nodes_.push_back(nd);
     }
   }
   
@@ -142,6 +150,7 @@ namespace Netlist {
   {
     enum NetState { Init      = 0
                   , BeginNet
+                  , Loop
                   , EndNet
                   };
 
@@ -172,8 +181,8 @@ namespace Netlist {
       /*A déboguer*/
       switch ( state ) {
         case Init:
-          if (nodeName == netTag){
-            cout << "Chouette !" << endl;
+          if ( (nodeName == netTag) ) {
+            //cout << "Chouette !" << endl;
             string netName = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"name" ));
             if (netName.empty()){
               cerr << "[ERROR] Net::fromXml(): empty name" << endl;
@@ -194,17 +203,51 @@ namespace Netlist {
               return NULL;
             }
             net = new Net(cell, netName, type);
-            state = EndNet;
-            continue;
+            state = Loop;
+            //break;
           }
+          break;
+        case Loop :
+          if ( (nodeName == netTag) and (xmlTextReaderNodeType(reader) == XML_READER_TYPE_ELEMENT) ){
+            //cout << "Chouette !" << endl;
+            string netName = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"name" ));
+            if (netName.empty()){
+              cerr << "[ERROR] Net::fromXml(): empty name" << endl;
+              return net;
+            }
+            string typeStr = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"type" ));
+            if (typeStr.empty()){
+              cerr << "[ERROR] Net::fromXml(): empty type attribute" << endl;
+              return net;
+            }
+            Term::Type type;
+            if (typeStr == "Internal"){
+              type = Term::Type::Internal;
+            } else if (typeStr == "External"){
+              type = Term::Type::External;
+            } else {
+              cerr << "[ERROR] Net::fromXml(): incorrect type" << endl;
+              return NULL;
+            }
+            net = new Net(cell, netName, type);
+            //state = EndNet;
+            continue;
+          } else {
+            bool test = Node::fromXml(net, reader);
+            if (test) continue;
+          }
+          //state = EndNet;
           break;
         case EndNet:
           if ( (nodeName == netTag) and (xmlTextReaderNodeType(reader) == XML_READER_TYPE_END_ELEMENT) ){
-            continue;
+            return net;
           } else {
-            if (Node::fromXml(net, reader)) continue;
+            bool test = Node::fromXml(net, reader);
+            if (test) continue;
+            else break;
             
           }
+          break;
       /*----------*/
         default: 
           break;
@@ -213,7 +256,7 @@ namespace Netlist {
       //cerr << "[ERROR] Net::fromXml(): Unknow or misplaced tag <" << nodeName
       //     << "> (line" << xmlTextReaderGetParserLineNumber(reader) << ")." << endl;
 
-     // break;
+      
 
     }
     return net;

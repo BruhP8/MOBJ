@@ -47,18 +47,17 @@ namespace Netlist {
     Term * toFind;
     const xmlChar* nodeTag = xmlTextReaderConstString( reader, (const xmlChar*)"node" );
 
-
-    const xmlChar* nodeName = xmlTextReaderConstLocalName( reader );
-    if (nodeName != nodeTag){
-      cerr << "We're not in a <node> balise but in <" << nodeName << "> !" << endl;
-      return false;
-    }
-
     switch ( xmlTextReaderNodeType(reader) ) {
         case XML_READER_TYPE_COMMENT:
         case XML_READER_TYPE_WHITESPACE:
         case XML_READER_TYPE_SIGNIFICANT_WHITESPACE:
             break;
+    }
+
+    const xmlChar* nodeName = xmlTextReaderConstLocalName( reader );
+    if (nodeName != nodeTag){
+      cerr << "We're not in a <node> balise but in <" << nodeName << "> !" << endl;
+      return false;
     }
     
     string termName = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"term"));
@@ -70,35 +69,35 @@ namespace Netlist {
     string instance = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"instance"));
 
     if(not instance.empty()){
-        // Instance provided, find the termName using the instance.
-        Instance * owner;
-        owner = net->getCell()->getInstance(instance);
+      // Instance provided, find the termName using the instance.
+      Instance * owner;
+      owner = net->getCell()->getInstance(instance);
         
-        toFind = owner->getTerm(termName);
-        
-        if(toFind == NULL){
-          retval = false;
-          cerr << "[ERROR] Node::fromXml : Could not find term named " << termName <<" in instance "<< instance << endl;
-          return false;
-        } else {
-          Term* term = new Term(owner, toFind);
-          Node* node = term->getNode();
-          node -> setId(atoi(id.c_str()));
-          node -> setPosition(term->getPosition());
-          net  -> add(node);
-          return true;
-        }
+      toFind = owner->getTerm(termName);
+       
+      if(toFind == NULL){
+        retval = false;
+        cerr << "[ERROR] Node::fromXml : Could not find term named " << termName <<" in instance "<< instance << endl;
+        return false;
+      } else {
+        Term* term = new Term(owner, toFind);
+        Node* node = term->getNode();
+        node -> setId(atoi(id.c_str()));
+        node -> setPosition(term->getPosition());
+        net  -> add(node);
+        return true;
+      }
 
     } else{
-        // No instance provided, find the Term using the net's owner cell
-        Cell * owner;
-        owner = net->getCell();
-        toFind = owner->getTerm(termName);
-        if(toFind == NULL){
-            retval = false;
-            cerr << "[ERROR] Node::fromXml : Could not find term named " << termName <<" in Cell "<<owner->getName() << endl;
-            return false;
-        } 
+      // No instance provided, find the Term using the net's owner cell
+      Cell * owner;
+      owner = net->getCell();
+      toFind = owner->getTerm(termName);
+      if(toFind == NULL){
+          retval = false;
+          cerr << "[ERROR] Node::fromXml : Could not find term named " << termName <<" in Cell "<<owner->getName() << endl;
+          return false;
+      } 
     }
     //newNode = new Node(toFind, atoi(id.c_str()));
     

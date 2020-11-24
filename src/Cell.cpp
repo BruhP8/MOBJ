@@ -175,8 +175,8 @@ namespace Netlist {
   
   void Cell::toXml(ostream& os) const{
     Indentation ind;
-    os << "Construction du modele <"+name_+">" << endl;
-    os << "<?xml version=\"1.0\"?>" << endl;
+    //os << "Construction du modele <"+name_+">" << endl;
+    os << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
     os << "<cell name=\""+name_+"\">" << endl;
     os << ++ind << "<terms>" << endl;
     ++ind;
