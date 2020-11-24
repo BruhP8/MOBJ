@@ -153,6 +153,13 @@ namespace Netlist {
 
     Net* net       = NULL;
 
+    switch ( xmlTextReaderNodeType(reader) ) {
+        case XML_READER_TYPE_COMMENT:
+        case XML_READER_TYPE_WHITESPACE:
+        case XML_READER_TYPE_SIGNIFICANT_WHITESPACE:
+            break;
+    }
+
     const xmlChar* nodeName = xmlTextReaderConstLocalName( reader );
     
     if (nodeName != netTag){

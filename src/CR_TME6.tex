@@ -1,7 +1,14 @@
 \documentclass{article}
 
+\usepackage[T1]{fontenc}
 \usepackage[french]{babel}
+\usepackage[margin=2cm, top=1.5cm, bottom=2cm]{geometry}
 
+\newcommand \Term{\texttt{Term}}
+\newcommand \Xml{\texttt{::fromXml()}}
+\newcommand \Net{\texttt{Net}}
+\newcommand \Node{\texttt{Node}}
+\newcommand \Instance{\texttt{Instance}}
 
 \author{DUPUY, LEGOUEIX}
 \title{UE MOBJ : Compte-rendu TME6}
@@ -10,14 +17,36 @@
 
 \maketitle
 
-\section{\texttt{Term::fromXml()}}
+\section{\Term \Xml}
 
-Dans \texttt{Term::fromXml()} on crée un Term 
+Dans \Term\Xml\ on crée un \Term. \\
+Objet simple : donc pas besoin de boucle \texttt{while(true)}.\\
+On instancie les attributs les uns après les autres en fait appelle à la
+la primitive \texttt{xmlTextReaderGetAttribute()}.
 
-\section{\texttt{Instance::fromXml()}}
+\section{\Instance \Xml}
+Idem que pour \Term \Xml.
 
-\section{\texttt{Net::fromXml()}}
+\section{\Net\Xml}
+%L'objet \Net\ étant un objet composé, il est nécessaire de boucler
+%afin de pouvoir récupérer tous les \Node\ de sa liste.\\
+Nous pourrions écrire un roman sur les raisons qui nous ont ammené à trouver
+une solution pour le cas du \Net\.\\
+Mais nous dirons seulement que de vouloir faire la même boucle que dans
+\texttt{Cell::fromXml()} était une mauvaise idée, et que la veille au soir
+à très exactement 23h30 nous trouvâmes la solution à ce problème.\\
+En effet, la solution était bien plus simple ! Il suffisait simplement de
+reprendre la structure de la fonction \Xml\ comme définie dans \Term\ , 
+\Instance\ ou bien \Node\ , puis d'ajouter une boucle après avoir créé le \Net\.\\
+Maintenant que nous savons la vérité, notre regard sur notre survie dans
+l'UE MOBJ a changé. Tout est possible !
 
-\section{\texttt{Node::fromXml()}}
+\section{\Node\Xml}
+La primitive de \Node\Xml\ est différente de celle des autres
+objet de la \texttt{Netlist} car l'objet \Node\ lors de sa création
+doit effectuer la liaison du \Net\ auquel il est rattaché avec le
+\Term\ qui l'encapsule.\\
+De plus, comme les \Term\ ont automatiquement créé leur \Node , il s'agit
+alors de mettre à jour les attributs du \Node\ encapsulé.
 
 \end{document}
