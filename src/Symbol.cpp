@@ -34,4 +34,15 @@ namespace Netlist {
     }
   }
 
+  void  Symbol::toXml ( ostream& os ) const
+  {
+    os << "COUCOU" << endl;
+  }
+
+  Symbol* Symbol::fromXml( Cell* cell, xmlTextReaderPtr reader ){
+    Symbol* symbol = NULL;
+
+    return symbol;
+  }
+
 }

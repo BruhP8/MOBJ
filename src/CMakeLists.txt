@@ -25,6 +25,8 @@
                                        XmlUtil.h
                                        Box.h
                                        Line.h
+                                       BoxShape.h
+                                       Shape.h
                                        Symbol.h
                         )
 
@@ -37,6 +39,8 @@
                                        Cell.cpp
                                        Box.cpp
                                        Line.cpp 
+                                       BoxShape.cpp
+                                       Shape.cpp
                                        Symbol.cpp
                                        XmlUtil.cpp
                                        Main7.cpp
