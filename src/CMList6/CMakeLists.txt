@@ -23,9 +23,6 @@
                                        Node.h
                                        Cell.h
                                        XmlUtil.h
-                                       Box.h
-                                       Line.h
-                                       Symbol.h
                         )
 
                      set( cpps         Indentation.cpp
@@ -35,17 +32,14 @@
                                        Point.cpp
                                        Node.cpp
                                        Cell.cpp
-                                       Box.cpp
-                                       Line.cpp 
-                                       Symbol.cpp
                                        XmlUtil.cpp
-                                       Main7.cpp
+                                       Main6.cpp
                         )
 
    
 # Faire l'edition de liens avec la LibXml2.
-       add_executable ( tme7 ${cpps} )
-target_link_libraries ( tme7 ${LIBXML2_LIBRARIES} )
+       add_executable ( tme6 ${cpps} )
+target_link_libraries ( tme6 ${LIBXML2_LIBRARIES} )
               install ( TARGETS      tme6         DESTINATION bin )
               install ( FILES        ${includes}  DESTINATION include )
 

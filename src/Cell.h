@@ -1,15 +1,13 @@
-// -*- explicit-buffer-name: "Cell.h<M1-MOBJ/4-5>" -*-
+// -*- explicit-buffer-name: "Cell.h<M1-MOBJ/8-10>" -*-
 
 #ifndef NETLIST_CELL_H
 #define NETLIST_CELL_H
 
-#include <iosfwd>
+#include <libxml/xmlreader.h>
 #include <string>
 #include <vector>
-#include <libxml/xmlreader.h>
 #include "Indentation.h"
-#include "XmlUtil.h"
-
+#include "Symbol.h"       // TME7
 
 namespace Netlist {
 
@@ -22,12 +20,12 @@ namespace Netlist {
     public:
       static       std::vector<Cell*>&     getAllCells       ();
       static       Cell*                   find              ( const std::string& );
-      static       Cell*                   fromXml           ( xmlTextReaderPtr );
-      static       Cell*                   load              ( const std::string& cellName );
-    public:
+      static       Cell*                   load              ( const std::string& );
+    public:                                                  
                                            Cell              ( const std::string& );
                                           ~Cell              ();
       inline const std::string&            getName           () const;
+      inline Symbol*                       getSymbol         () const;  // TME7
       inline const std::vector<Instance*>& getInstances      () const;
       inline const std::vector<Term*>&     getTerms          () const;
       inline const std::vector<Net*>&      getNets           () const;
@@ -43,20 +41,21 @@ namespace Netlist {
                    void                    remove            ( Net* );
                    bool                    connect           ( const std::string& name, Net* net );
                    unsigned int            newNetId          ();
-                   void                    toXml             ( std::ostream& os ) const;
-                   
-                   void                    save              () const;
-
+                   void                    save              ( const std::string& name="" ) const;
+                   void                    toXml             ( std::ostream& ) const;
+      static       Cell*                   fromXml           ( xmlTextReaderPtr );
     private:
-      static       std::vector<Cell*>      cells_;
-                   std::string             name_;
-                   std::vector<Term*>      terms_;
-                   std::vector<Instance*>  instances_;
-                   std::vector<Net*>       nets_;
-                   unsigned int            maxNetIds_;
+      static  std::vector<Cell*>      cells_;
+              Symbol                  symbol_;
+              std::string             name_;
+              std::vector<Term*>      terms_;
+              std::vector<Instance*>  instances_;
+              std::vector<Net*>       nets_;
+              unsigned int            maxNetIds_;
   };
 
 
+  inline Symbol*                       Cell::getSymbol    () const { return const_cast<Symbol*>(&symbol_); }  // TME7
   inline const std::string&            Cell::getName      () const { return name_; }
   inline const std::vector<Instance*>& Cell::getInstances () const { return instances_; };
   inline const std::vector<Term*>&     Cell::getTerms     () const { return terms_; };
@@ -66,4 +65,3 @@ namespace Netlist {
 }  // Netlist namespace.
 
 #endif  // NETLIST_CELL_H
-

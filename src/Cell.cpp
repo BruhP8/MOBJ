@@ -1,19 +1,12 @@
-/* Projet MOBJ                                  *
- * Auteurs : Clément Dupuy et Nicolas Legoueix  *
- * TME 4, 5 et 6                                */
-
-
-// -*- explicit-buffer-name: "Cell.cpp<M1-MOBJ/4-5>" -*-
+// -*- explicit-buffer-name: "Cell.cpp<M1-MOBJ/8-10>" -*-
 
 #include  <cstdlib>
-#include  <iostream>
 #include  <fstream>
-#include  <libxml/xmlreader.h>
+#include  "XmlUtil.h"
 #include  "Cell.h"
 #include  "Term.h"
 #include  "Net.h"
 #include  "Instance.h"
-#include  "XmlUtil.h"
 
 
 namespace Netlist {
@@ -22,6 +15,10 @@ namespace Netlist {
 
 
   vector<Cell*>  Cell::cells_;
+
+
+  vector<Cell*>& Cell::getAllCells ()
+  { return cells_; }
 
 
   Cell* Cell::find ( const string& name )
@@ -33,8 +30,44 @@ namespace Netlist {
   }
 
 
+  Cell* Cell::load ( const string& cellName )
+  {
+    string           cellFile = "./cells/" + cellName + ".xml";
+    xmlTextReaderPtr reader;
+
+    cerr << "Loading <" << cellFile << ">" << endl;
+    reader = xmlNewTextReaderFilename( cellFile.c_str() );
+    if (reader == NULL) {
+      cerr << "[ERROR] Cell::load() unable to open file <" << cellFile << ">." << endl;
+      return NULL;
+    }
+
+    Cell* cell = Cell::fromXml( reader );
+    xmlFreeTextReader( reader );
+
+    return cell;
+  }
+
+
+  void  Cell::save ( const std::string& name ) const
+  {
+    string  fileName = (name.empty()) ? getName() + ".xml" : name + ".xml";
+    fstream fstream ( fileName.c_str(), ios_base::out|ios_base::trunc );
+    if (not fstream.good()) {
+      cerr << "[ERROR] Cell::save() unable to open file <" << fileName << ">." << endl;
+      return;
+    }
+
+    cerr << "Saving <Cell " << getName() << "> in <" << fileName << ">" << endl;
+    toXml( fstream );
+
+    fstream.close();
+  }
+
+
   Cell::Cell ( const string& name )
-    : name_     (name) 
+    : symbol_   (this)  // TME7
+    , name_     (name) 
     , terms_    ()
     , instances_()
     , nets_     ()
@@ -131,8 +164,7 @@ namespace Netlist {
     nets_.push_back( net );
   }
 
-  /* Connect le Net donné en argument               *
-   * avec le Term dont le nom est passé en argument */
+
   bool  Cell::connect ( const string& name, Net* net )
   {
     Term* term = getTerm( name );
@@ -171,44 +203,35 @@ namespace Netlist {
   { return maxNetIds_++; }
 
 
-  // Cell::toXml() à écrire ici...
-  
-  void Cell::toXml(ostream& os) const{
-    Indentation ind;
-    //os << "Construction du modele <"+name_+">" << endl;
-    os << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
-    os << "<cell name=\""+name_+"\">" << endl;
-    os << ++ind << "<terms>" << endl;
-    ++ind;
-    for (Term* iterm : terms_){
-      os << ind;
-      iterm->toXml(os);
-    }
-    --ind;
-    os << ind << "</terms>" << endl;
-    os << ind << "<instances>" << endl;
-    ind++;
-    for (Instance* iinst : instances_){
-      os << ind;
-      iinst->toXml(os);
-    }
-    ind--;
-    os << ind << "</instances>" << endl;
-    
-    os << ind << "<nets>" << endl;
-    ind++;
-    for (Net* inet : nets_){
-      os << ind;
-      inet->toXml(os);
-    }
-    --ind;
-    os << ind << "</nets>" << endl;
-    --ind;
-    os << ind << "</cell>\n" << endl;
+  void  Cell::toXml ( ostream& stream ) const
+  {
+    stream << "<?xml version=\"1.0\"?>\n";
+    stream << indent++ << "<cell name=\"" << name_ << "\">\n";
 
+    stream << indent++ << "<terms>\n";
+    for ( vector<Term*>::const_iterator iterm=terms_.begin() ; iterm != terms_.end() ; ++iterm ) {
+      (*iterm)->toXml( stream );
+    }
+    stream << --indent << "</terms>\n";
+
+    stream << indent++ << "<instances>\n";
+    for ( vector<Instance*>::const_iterator iinst=instances_.begin() ; iinst != instances_.end() ; ++iinst ) {
+      (*iinst)->toXml( stream );
+    }
+    stream << --indent << "</instances>\n";
+
+    stream << indent++ << "<nets>\n";
+    for ( vector<Net*>::const_iterator inet=nets_.begin() ; inet != nets_.end() ; ++inet ) {
+      (*inet)->toXml( stream );
+    }
+    stream << --indent << "</nets>\n";
+
+    symbol_.toXml( stream );  // TME7
+
+    stream << --indent << "</cell>\n";
   }
 
-  /*Parser from Xml*/
+
   Cell* Cell::fromXml ( xmlTextReaderPtr reader )
   {
     enum  State { Init           = 0
@@ -219,13 +242,15 @@ namespace Netlist {
                 , EndInstances
                 , BeginNets
                 , EndNets
+                , BeginSymbol
                 , EndCell
-                };
+                , ParseError };
 
     const xmlChar* cellTag      = xmlTextReaderConstString( reader, (const xmlChar*)"cell" );
     const xmlChar* netsTag      = xmlTextReaderConstString( reader, (const xmlChar*)"nets" );
     const xmlChar* termsTag     = xmlTextReaderConstString( reader, (const xmlChar*)"terms" );
     const xmlChar* instancesTag = xmlTextReaderConstString( reader, (const xmlChar*)"instances" );
+    const xmlChar* symbolTag    = xmlTextReaderConstString( reader, (const xmlChar*)"symbol" );  // TME7
 
     Cell* cell   = NULL;
     State state  = Init;
@@ -257,7 +282,8 @@ namespace Netlist {
               cell = new Cell ( cellName );
               state = BeginTerms;
               continue;
-            }
+            } else
+              state = ParseError;
           }
           break;
         case BeginTerms:
@@ -296,10 +322,18 @@ namespace Netlist {
           break;
         case EndNets:
           if ( (nodeName == netsTag) and (xmlTextReaderNodeType(reader) == XML_READER_TYPE_END_ELEMENT) ) {
-            state = EndCell;
+            state = BeginSymbol;  // TME7
             continue;
           } else {
             if (Net::fromXml(cell,reader)) continue;
+          }
+          break;
+        case BeginSymbol:  // TME7
+          if ( (nodeName == symbolTag) and (xmlTextReaderNodeType(reader) == XML_READER_TYPE_ELEMENT) ) {
+            if (Symbol::fromXml(cell,reader)) {
+              state = EndCell;
+              continue;
+            }
           }
           break;
         case EndCell:
@@ -318,42 +352,6 @@ namespace Netlist {
 
     return cell;
   }
-
-
-  Cell* Cell::load ( const string& cellName )
-  {
-    string           cellFile = "../src/cells/" + cellName + ".xml";
-    xmlTextReaderPtr reader;
-
-    reader = xmlNewTextReaderFilename( cellFile.c_str() );
-    if (reader == NULL) {
-      cerr << "[ERROR] Cell::load() unable to open file <" << cellFile << ">." << endl;
-      return NULL;
-    }
-
-    Cell* cell = Cell::fromXml( reader );
-    xmlFreeTextReader( reader );
-
-    return cell;
-  }
-  
-  void  Cell::save () const
-  {
-    string  fileName   = getName() + ".xml";
-    const char* fchar = fileName.c_str();
-    fstream fileStream ( fchar, ios_base::out | ios_base::trunc );
-    
-    if (not fileStream.good()) {
-      cerr << "[ERROR] Cell::save() unable to open file <" << fileName << ">." << endl;
-      return;
-    }
-
-    cerr << "Saving <Cell " << getName() << "> in <" << fileName << ">" << endl;
-    toXml( fileStream );
-
-    fileStream.close();
-  }
-
 
 
 }  // Netlist namespace.
