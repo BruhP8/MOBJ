@@ -4,6 +4,7 @@
 
 #include "Instance.h"
 #include "Net.h"
+#include "XmlUtil.h"
 
 namespace Netlist {
 

@@ -46,7 +46,7 @@
 # Faire l'edition de liens avec la LibXml2.
        add_executable ( tme7 ${cpps} )
 target_link_libraries ( tme7 ${LIBXML2_LIBRARIES} )
-              install ( TARGETS      tme6         DESTINATION bin )
+              install ( TARGETS      tme7         DESTINATION bin )
               install ( FILES        ${includes}  DESTINATION include )
 
   

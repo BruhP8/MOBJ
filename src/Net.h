@@ -23,6 +23,7 @@ namespace Netlist {
     unsigned int             id_;
     Term::Type             type_;
     std::vector<Node *>   nodes_;
+    std::vector<Line *>   lines_;
     
   public  :
     
@@ -36,10 +37,14 @@ namespace Netlist {
     inline        unsigned int          getId           ()  const;
     inline        Term::Type            getType         ()  const;
     inline  const std::vector<Node*>&   getNodes        ()  const;
+    inline  const std::vector<Line*>&   getLines        ()  const; 
+                  Node*                 getNode         ( size_t id );
                   size_t                getFreeNodeId   ()  const;
     
                   void                  add             ( Node* );
+                  void                  add             ( Line* );
                   bool                  remove          ( Node* );
+                  bool                  remove          ( Line* );
                   void                  toXml           ( std::ostream & );
     
   };
@@ -49,7 +54,7 @@ namespace Netlist {
   inline         unsigned int         Net::getId        ()  const { return id_;    }
   inline         Term::Type           Net::getType      ()  const { return type_;  }
   inline  const  std::vector<Node*>&  Net::getNodes     ()  const { return nodes_; }
-
+  inline  const  std::vector<Line*>&  Net::getLines     ()  const { return lines_; }
 }
 
 #endif

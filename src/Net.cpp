@@ -5,6 +5,8 @@
 #include "Net.h"
 #include "Node.h"
 #include "Instance.h"
+#include "Line.h"
+#include "XmlUtil.h"
 
 namespace Netlist {
   
@@ -47,6 +49,11 @@ namespace Netlist {
         itnode != nodes_.end(); ++itnode){
           nodes_.erase(itnode);
     }
+  }
+
+  Node*   Net::getNode  ( size_t id ){
+    Node* nd = nodes_[id];
+    return nd;
   }
   
   /*------------------------------------------------------------------*
@@ -98,6 +105,13 @@ namespace Netlist {
       } nodes_.push_back(nd);
     }
   }
+
+  void  Net::add  ( Line* line )
+  {
+    if ( line ) {
+      lines_.push_back( line );
+    }
+  }
   
   /*------------------------------------------------------------------*
    * Pour retirer un Node dans le vecteur :                           *
@@ -113,6 +127,20 @@ namespace Netlist {
         return true;
       }
     } 
+    return false;
+  }
+
+  bool  Net::remove ( Line* ln )
+  {
+    if (ln) {
+      for ( vector<Line*>::iterator il = lines_.begin();
+            il != lines_.end(); ++il ){
+        if ( *il == ln ) {
+          lines_.erase( il );
+          return true;
+        }
+      }
+    }
     return false;
   }
 
@@ -149,8 +177,9 @@ namespace Netlist {
   Net* Net::fromXml ( Cell* cell, xmlTextReaderPtr reader )
   {
    
-    const xmlChar* netTag = xmlTextReaderConstString( reader, (const xmlChar*)"net" );
-
+    const xmlChar* netTag  = xmlTextReaderConstString( reader, (const xmlChar*)"net"  );
+    const xmlChar* nodeTag = xmlTextReaderConstString( reader, (const xmlChar*)"node" );
+    const xmlChar* lineTag = xmlTextReaderConstString( reader, (const xmlChar*)"line" ); 
     Net* net       = NULL;
 
     switch ( xmlTextReaderNodeType(reader) ) {
@@ -185,15 +214,23 @@ namespace Netlist {
       net = new Net(cell, netName, type);
       cout << "Ça y est, Net est créé !" << endl;
 
-      while(not (xmlTextReaderNodeType(reader) == XML_READER_TYPE_END_ELEMENT) ) {
+      //while(not (xmlTextReaderNodeType(reader) == XML_READER_TYPE_END_ELEMENT) ) {
+      while( xmlTextReaderConstLocalName(reader) == nodeTag ){
         xmlTextReaderRead( reader );
         xmlTextReaderRead( reader );
-        cout << "On n'est pas encore dans une balise de fin" << endl;
+        cout << "On est dans une balise node" << endl;
         if (! Node::fromXml(net, reader) ){
           cout << "Error Node::fromXml()" << endl;
-          return net;
+          return NULL;
         }
-      }       
+      }
+      while ( xmlTextReaderConstLocalName(reader) == lineTag ){
+        cout << "On est dans une balise line" << endl;
+        if (! Line::fromXml(net, reader) ){
+          cout << "Error Line::fromXml()" << endl;
+          return NULL;
+        }
+      }
     }    
     return net;
 

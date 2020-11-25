@@ -31,7 +31,9 @@ namespace Netlist {
       Direction           direction_; 
       Type                     type_;
       Net*                      net_; 
-      Node                     node_;
+      /*A cause du passage de Node en abstract  Il existe 2 types de Node, les NodeTerm *
+       *et les NodePoint, donc Term contient un NodeTerm                                */
+      NodeTerm                 node_; 
       Term ( Term & );
       
     public  :
