@@ -26,6 +26,7 @@
                                        Box.h
                                        Line.h
                                        BoxShape.h
+                                       LineShape.h
                                        Shape.h
                                        Symbol.h
                         )
@@ -40,6 +41,7 @@
                                        Box.cpp
                                        Line.cpp 
                                        BoxShape.cpp
+                                       LineShape.cpp
                                        Shape.cpp
                                        Symbol.cpp
                                        XmlUtil.cpp
