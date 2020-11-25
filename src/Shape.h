@@ -12,6 +12,7 @@ namespace Netlist {
 
   //class Symbol;
   class BoxShape;
+  class LineShape;
 
   class Shape {
 
