@@ -31,6 +31,7 @@ namespace Netlist {
   , id_(cellule->newNetId())
   , type_(type)
   , nodes_()
+  , lines_()
   {
     cellule->add(this);
   }
@@ -52,7 +53,19 @@ namespace Netlist {
   }
 
   Node*   Net::getNode  ( size_t id ){
-    Node* nd = nodes_[id];
+    //Node* nd = nodes_[id];
+    Node *nd = NULL;
+
+    for(size_t i = 0; i < nodes_.size(); i++){
+      if (nodes_[i]->getId() == id){
+        nd = nodes_[i];
+      }
+    }
+    if (nd == NULL){
+      cerr << "[ERROR] Net::getNode : Node not found" << endl;
+    }
+
+
     return nd;
   }
   
@@ -83,32 +96,16 @@ namespace Netlist {
    *------------------------------------------------------------------*/
   void  Net::add  ( Node* nd )
   {
-    //size_t nd_id = getFreeNodeId();
-    size_t nd_id = nd->getId();
-    if( nodes_.empty() ){
-      nd -> setId(0);
-      nodes_.push_back(nd);
-    }
-    /*if( nd_id < nodes_.size() ){
-      nd -> setId ( nd_id ) ;
-      nodes_[nd_id] = nd;
-    }*/
-    else {
-      /*nd -> setId(nodes_.size());
-      nodes_.push_back(nd);*/
-      for( vector<Node*>::iterator inode = nodes_.begin();
-           inode != nodes_.end(); ++inode ){
-        size_t iid = (*inode)->getId();
-        if (nd_id < iid){
-          nodes_.insert(inode, nd);
-        }
-      } nodes_.push_back(nd);
-    }
+    cout << "-- SIZE OF Net::nodes_ : " << nodes_.size() << endl;
+    nodes_.push_back(nd);
+    
   }
 
   void  Net::add  ( Line* line )
   {
+    cout << "-- INSERTION of Line" << endl;
     if ( line ) {
+      
       lines_.push_back( line );
     }
   }
@@ -159,24 +156,32 @@ namespace Netlist {
       type = "External";
     }
 
-    os << "<net name=\"" << name_ << "\" type=\"" << type << "\"/>" << endl;
     ++ind;
     ++ind;
-    ++ind;
+    os << ind << "<net name=\"" << name_ << "\" type=\"" << type << "\"/>" << endl;
+    
+    //++ind;
     for ( Node* inode : nodes_ ){
       if (inode != NULL){
         os << ind;
         inode->toXml(os);
       }
     }
-    --ind;
+    for ( Line* line : lines_ ){
+      if (line != NULL){
+        os << ind;
+        line->toXml(os);
+      }
+    }
+    //--ind;
     os << ind << "</net>" << endl;
   }
 
 
   Net* Net::fromXml ( Cell* cell, xmlTextReaderPtr reader )
   {
-   
+    cout << "Beginning of Net::fromXml()" << endl;
+    
     const xmlChar* netTag  = xmlTextReaderConstString( reader, (const xmlChar*)"net"  );
     const xmlChar* nodeTag = xmlTextReaderConstString( reader, (const xmlChar*)"node" );
     const xmlChar* lineTag = xmlTextReaderConstString( reader, (const xmlChar*)"line" ); 
@@ -200,8 +205,6 @@ namespace Netlist {
     if (netName.empty() or typeStr.empty()) return net;
     else
     {
-      cout << "-- net name : " << netName << endl;
-      cout << "-- net type : " << typeStr << endl;
       Term::Type type;
       if (typeStr == "Internal"){
         type = Term::Type::Internal;
@@ -214,22 +217,48 @@ namespace Netlist {
       net = new Net(cell, netName, type);
       cout << "Ça y est, Net est créé !" << endl;
 
-      //while(not (xmlTextReaderNodeType(reader) == XML_READER_TYPE_END_ELEMENT) ) {
-      while( xmlTextReaderConstLocalName(reader) == nodeTag ){
-        xmlTextReaderRead( reader );
-        xmlTextReaderRead( reader );
-        cout << "On est dans une balise node" << endl;
-        if (! Node::fromXml(net, reader) ){
-          cout << "Error Node::fromXml()" << endl;
-          return NULL;
+      while( true ){
+        int status = xmlTextReaderRead(reader);
+        if (status != 1) {
+          if (status != 0) {
+            cerr << "[ERROR] Cell::fromXml(): Unexpected termination of the XML parser." << endl;
+          }
+          break;
         }
-      }
-      while ( xmlTextReaderConstLocalName(reader) == lineTag ){
-        cout << "On est dans une balise line" << endl;
-        if (! Line::fromXml(net, reader) ){
-          cout << "Error Line::fromXml()" << endl;
-          return NULL;
+
+        switch( xmlTextReaderNodeType( reader ) ){
+          case  XML_READER_TYPE_COMMENT:
+          case  XML_READER_TYPE_WHITESPACE:
+          case  XML_READER_TYPE_SIGNIFICANT_WHITESPACE:
+                continue;
+          case  XML_READER_TYPE_END_ELEMENT:
+                return net;
         }
+
+        const xmlChar* nodeName = xmlTextReaderConstLocalName(reader);
+
+        if ( nodeName == nodeTag ){
+          bool test = Node::fromXml(net, reader);
+          if (! test){
+            cout << "[Error] Node::fromXml()" << endl;
+            return NULL;
+          } else {
+            continue;
+          }
+        }
+
+        if ( nodeName == lineTag ){
+          bool test = Line::fromXml(net, reader);
+          if (! test ){
+            cout << "[Error] Line::fromXml()" << endl;
+            return NULL;
+          } else {
+            continue;
+          }
+        }
+
+        break;
+
       }
     }    
     return net;
