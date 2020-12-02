@@ -19,7 +19,8 @@ namespace Netlist {
 
   void TermShape::toXml ( ostream& os )
   {
-    cout << "TermShape::toXml()" << endl;
+    Indentation ind;
+    //cout << "TermShape::toXml()" << endl;
     string strAlign = "";
     switch( align_ ){
       case 1 :
@@ -37,8 +38,11 @@ namespace Netlist {
       default:
         break;
     }
-    os << "<term name=\"" << term_->getName() << "\" x1=\"" << x_ 
-       << "\" y1=\"" << y_ << "\" align=\"" << strAlign << "\" />";
+    //ind++;
+    //ind++;
+    //ind++;
+    os << ind << "<term name=\"" << term_->getName() << "\" x1=\"" << x_ 
+       << "\" y1=\"" << y_ << "\" align=\"" << strAlign << "\" />" << endl;
   }
 
   TermShape* TermShape::fromXml ( Symbol* symb, xmlTextReaderPtr reader )
@@ -68,9 +72,9 @@ namespace Netlist {
         cerr << "[ERROR] TermShape::fromXml() : calling function xmlGetIntAttribute() for arg y" << endl;
         return tsh;
       }
-      else {
-        cout << "-- -- x1 : " << x << ", y1 : " << y << endl;
-      }
+      //else {
+      //  cout << "-- -- x1 : " << x << ", y1 : " << y << endl;
+      //}
       string strAlign = xmlCharToString( xmlTextReaderGetAttribute( reader, (const xmlChar*)"align" ));
       if (strAlign.empty()){
         cerr << "[ERROR] TermShape::fromXml() : arg align not found" << endl;
@@ -87,7 +91,7 @@ namespace Netlist {
       } else {
         cerr << "[ERROR] Term::fromXml() : invalid format for align attribute" << endl;
       }
-      cout << "-- -- align : " << strAlign << endl;
+      //cout << "-- -- align : " << strAlign << endl;
 
       tsh = new TermShape(symb, termName, x, y, align);
 

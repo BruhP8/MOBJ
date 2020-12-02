@@ -8,13 +8,16 @@
 #include  <vector>
 #include  "Box.h"
 
+//#include "LineShape.h"
+
 namespace Netlist {
 
   class Term;
   class Cell;
   class Shape;
   class TermShape;
-
+  class BoxShape;
+  class LineShape;
 
   class Symbol {
     public:

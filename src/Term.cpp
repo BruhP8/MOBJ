@@ -1,3 +1,4 @@
+#include "Indentation.h"
 #include "Term.h"
 #include "Net.h"
 #include "XmlUtil.h"
@@ -116,6 +117,7 @@ namespace Netlist {
   /* Affiche le Term au format Xml */
   void  Term::toXml  ( ostream& os )
   {
+    Indentation indent;
     string dir="";
     switch(direction_){
       case 1 :
@@ -148,8 +150,14 @@ namespace Netlist {
         dir = "Unknown";
       }
     }
-    os << "<term name=\"" << name_ << "\" direction=\"" << dir << "\" x=\"" 
+    ++indent;
+    ++indent;
+    //++indent;
+    os << indent << "<term name=\"" << name_ << "\" direction=\"" << dir << "\" x=\"" 
        << getPosition().getX() << "\" y=\"" << getPosition().getY() << "\"/>" << endl;
+    indent--;
+    indent--;
+    //indent--;
   }
   
   /*------------------------------------------------------------------*
@@ -162,6 +170,7 @@ namespace Netlist {
   Term*  Term::fromXml ( Cell* cell, xmlTextReaderPtr reader )
   {
 
+    //cout << "Beginning of Term::fromXml()" << endl;
     Term* term = NULL;
 
     switch ( xmlTextReaderNodeType(reader) ){
@@ -211,6 +220,8 @@ namespace Netlist {
     term = new Term(cell, termName, dir);
 
     term->setPosition(x, y);
+    
+    //cout << "End of Term::fromXml()" << endl;
 
     return term;
 

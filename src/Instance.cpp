@@ -107,16 +107,36 @@ namespace Netlist {
     }
   }
 
-
+  /*------------------------------------------------------------------*
+   * Affichage d'un Term                                              *
+   * - Affiche le nom de l'instance à laquelle dont il dépend         *
+   * - Affiche le nom de sa mastercell                                *
+   * - Affiche ses coordonnées                                        *
+   * STATUS   --  DONE                                                *
+   *------------------------------------------------------------------*/
   void  Instance::toXml  ( ostream& os )
   {
-    os << "<instance name=\"" << name_ << "\" mastercell=\"" 
+    Indentation ind;
+    ++ind;
+    ++ind;
+    os << ind << "<instance name=\"" << name_ << "\" mastercell=\"" 
        << masterCell_->getName() << "\" x=\"" << position_.getX() 
        << "\" y=\"" << position_.getY() << "\"/>" << endl;
+    ind--;
+    ind--;
   }
 
+  /*------------------------------------------------------------------*
+   * Création d'une Instance à partir d'un fichier Xml                *
+   * - Lit chaque attribut dans le fichier                            *
+   * - Si les attributs ont été lus correctement                      *
+   * - Alors on peut créer l'Instance                                 *
+   * STATUS   --  DONE                                                *
+   *------------------------------------------------------------------*/
   Instance* Instance::fromXml ( Cell* cell, xmlTextReaderPtr reader ){
     
+    //cout << "Beginning of Instance::fromXml()" << endl;
+
     Instance* instance = NULL;
     
     switch( xmlTextReaderNodeType(reader) ){

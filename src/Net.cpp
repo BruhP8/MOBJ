@@ -96,14 +96,14 @@ namespace Netlist {
    *------------------------------------------------------------------*/
   void  Net::add  ( Node* nd )
   {
-    cout << "-- SIZE OF Net::nodes_ : " << nodes_.size() << endl;
+    //cout << "-- SIZE OF Net::nodes_ : " << nodes_.size() << endl;
     nodes_.push_back(nd);
     
   }
 
   void  Net::add  ( Line* line )
   {
-    cout << "-- INSERTION of Line" << endl;
+    //cout << "-- INSERTION of Line" << endl;
     if ( line ) {
       
       lines_.push_back( line );
@@ -156,11 +156,11 @@ namespace Netlist {
       type = "External";
     }
 
-    ++ind;
+    ind++;
     ++ind;
     os << ind << "<net name=\"" << name_ << "\" type=\"" << type << "\"/>" << endl;
     
-    //++ind;
+    --ind;
     for ( Node* inode : nodes_ ){
       if (inode != NULL){
         os << ind;
@@ -173,7 +173,7 @@ namespace Netlist {
         line->toXml(os);
       }
     }
-    //--ind;
+    ++ind;
     os << ind << "</net>" << endl;
   }
 
@@ -215,7 +215,6 @@ namespace Netlist {
         return NULL;
       }
       net = new Net(cell, netName, type);
-      cout << "Ça y est, Net est créé !" << endl;
 
       while( true ){
         int status = xmlTextReaderRead(reader);
