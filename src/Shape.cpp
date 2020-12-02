@@ -3,6 +3,7 @@
 #include "Shape.h"
 #include "BoxShape.h"
 #include "TermShape.h"
+#include "LineShape.h"
 #include "XmlUtil.h"
 #include <libxml/xmlreader.h>
 
@@ -36,21 +37,21 @@ namespace Netlist {
       = xmlTextReaderConstLocalName( reader );
     cout << nodeName << endl;
     Shape* shape = NULL;
-    if (boxTag == nodeName)
+    if (boxTag == nodeName){
       shape = BoxShape::fromXml( owner, reader );
-    if (ellipseTag == nodeName)
+    }if (ellipseTag == nodeName){
       cout << "EllipseShape" << endl;
       //shape = EllipseShape::fromXml( owner, reader );
-    if (arcTag == nodeName)
+    }if (arcTag == nodeName){
       cout << "ArcShape" << endl;
       //shape = ArcShape::fromXml( owner, reader );
-    if (lineTag == nodeName)
+    }if (lineTag == nodeName){
       cout << "LineShape" << endl;
-      //shape = LineShape::fromXml( owner, reader );
-    if (termTag == nodeName)
+      shape = LineShape::fromXml( owner, reader );
+    }if (termTag == nodeName){
       shape = TermShape::fromXml( owner, reader );
 
-    if (shape == NULL)
+    }if (shape == NULL)
       cerr << "[ERROR] Unknown or misplaced tag <" << nodeName << "> (line:"
            << xmlTextReaderGetParserLineNumber(reader) << ")." << endl;
 

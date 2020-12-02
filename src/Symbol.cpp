@@ -72,12 +72,6 @@ namespace Netlist {
     Symbol* symbol = NULL;
     State state    = BeginBox;
 
-    //const xmlChar* boxTag     = xmlTextReaderConstString( reader, (const xmlChar*)"box"     );
-    //const xmlChar* termTag    = xmlTextReaderConstString( reader, (const xmlChar*)"term"    );
-    //const xmlChar* arcTag     = xmlTextReaderConstString( reader, (const xmlChar*)"arc"     );
-    //const xmlChar* lineTag    = xmlTextReaderConstString( reader, (const xmlChar*)"line"    );
-    //const xmlChar* ellipseTag = xmlTextReaderConstString( reader, (const xmlChar*)"ellipse" );
-
     switch( xmlTextReaderNodeType( reader ) ){
       case  XML_READER_TYPE_COMMENT:
       case  XML_READER_TYPE_WHITESPACE:
