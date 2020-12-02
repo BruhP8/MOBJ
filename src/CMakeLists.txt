@@ -10,8 +10,12 @@
  set (CMAKE_INSTALL_PREFIX       "../install" )
 
  find_package(LibXml2 REQUIRED)
- find_package(Qt4     REQUIRED)
- include(${QT_USE_FILE})
+ find_package(Qt5Core     REQUIRED)
+ find_package(Qt5Gui     REQUIRED)
+ find_package(Qt5Widgets     REQUIRED)
+ set(CMAKE_AUTOMOC ON)
+
+ #include(${QT_USE_FILE})
 
     include_directories( ${SCHEMATIC_SOURCE_DIR}
                          ${LIBXML2_INCLUDE_DIR}
@@ -54,7 +58,7 @@
                                       Main.cpp
                        )
 
-           qt4_wrap_cpp( mocCpps      ${mocIncludes} )
+           qt5_wrap_cpp( mocCpps      ${mocIncludes} )
 
          add_executable( tme810       ${cpps} ${mocCpps} )
   target_link_libraries( tme810       ${QT_LIBRARIES} ${LIBXML2_LIBRARIES} )
