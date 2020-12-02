@@ -61,10 +61,7 @@ namespace Netlist {
 
   void  BoxShape::toXml( ostream& os )
   {
-    //cout << "<Je suis dans BoxShape>" << endl;
-    Indentation ind;
-    //ind++;
-    os << ind << "<box x1=\"" << box_.getX1() << "\" y1=\"" << box_.getY1() 
+    os << indent << "<box x1=\"" << box_.getX1() << "\" y1=\"" << box_.getY1() 
     << "\" x2=\"" << box_.getX2() << "\" y2=\"" << box_.getY2() << "\"/>" << endl;
   }
 

@@ -40,37 +40,20 @@ namespace Netlist {
 
   void  Symbol::toXml ( ostream& os ) const
   {
-    //os << "COUCOU" << endl;
-    Indentation ind;
-    ind++;
-    //ind++;
-    os << ind << "<symbol>" << endl;
-    ind++;
-    //cout << "-- SIZE OF shapes_ : " << shapes_.size() << endl;
+    os << indent << "<symbol>" << endl;
+    indent++;
     for (Shape* ishape : shapes_){
-      os << ind;
       ishape->toXml(os);
     }
-    ind--;
-    os << ind << "</symbol>" << endl;
-    //ind--;
-    ind--;
+    indent--;
+    os << indent << "</symbol>" << endl;
   }
 
   Symbol* Symbol::fromXml( Cell* cell, xmlTextReaderPtr reader ){
     
-    enum  State {
-        BeginBox
-      , BeginLine
-      , BeginTerm
-      , BeginArc
-      , BeginEllipse
-    };
-
     cout << "Beginning of Symbol::fromXml()" << endl;
 
     Symbol* symbol = NULL;
-    State state    = BeginBox;
 
     switch( xmlTextReaderNodeType( reader ) ){
       case  XML_READER_TYPE_COMMENT:
@@ -113,7 +96,6 @@ namespace Netlist {
 
     }
     //cout << "rien n'a été trouvé" << endl;
-    
 
     cout << "End of Symbol::fromXml()" << endl;
     return symbol;

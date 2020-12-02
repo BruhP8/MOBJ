@@ -19,7 +19,7 @@ namespace Netlist {
 
   void TermShape::toXml ( ostream& os )
   {
-    Indentation ind;
+    //Indentation ind;
     //cout << "TermShape::toXml()" << endl;
     string strAlign = "";
     switch( align_ ){
@@ -41,7 +41,7 @@ namespace Netlist {
     //ind++;
     //ind++;
     //ind++;
-    os << ind << "<term name=\"" << term_->getName() << "\" x1=\"" << x_ 
+    os << indent << "<term name=\"" << term_->getName() << "\" x1=\"" << x_ 
        << "\" y1=\"" << y_ << "\" align=\"" << strAlign << "\" />" << endl;
   }
 

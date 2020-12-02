@@ -107,6 +107,17 @@ namespace Netlist {
     }
   }
 
+
+  void Instance::setPosition ( const Point& p )
+  {
+
+  }
+
+  void Instance::setPosition ( int x, int y )
+  {
+    
+  }
+
   /*------------------------------------------------------------------*
    * Affichage d'un Term                                              *
    * - Affiche le nom de l'instance à laquelle dont il dépend         *
@@ -116,14 +127,9 @@ namespace Netlist {
    *------------------------------------------------------------------*/
   void  Instance::toXml  ( ostream& os )
   {
-    Indentation ind;
-    ++ind;
-    ++ind;
-    os << ind << "<instance name=\"" << name_ << "\" mastercell=\"" 
+    os << indent << "<instance name=\"" << name_ << "\" mastercell=\"" 
        << masterCell_->getName() << "\" x=\"" << position_.getX() 
        << "\" y=\"" << position_.getY() << "\"/>" << endl;
-    ind--;
-    ind--;
   }
 
   /*------------------------------------------------------------------*
