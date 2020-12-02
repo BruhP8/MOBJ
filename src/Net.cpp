@@ -148,7 +148,6 @@ namespace Netlist {
    * STATUS   --   DONE                                               *
    *------------------------------------------------------------------*/
   void  Net::toXml ( ostream& os ){
-    Indentation ind;
     string type = "";
     if(type_ == Term::Internal){
       type = "Internal";
@@ -156,25 +155,23 @@ namespace Netlist {
       type = "External";
     }
 
-    ind++;
-    ++ind;
-    os << ind << "<net name=\"" << name_ << "\" type=\"" << type << "\"/>" << endl;
-    
-    --ind;
+    os << indent << "<net name=\"" << name_ << "\" type=\"" << type << "\"/>" << endl;
+
+    indent++;    
     for ( Node* inode : nodes_ ){
       if (inode != NULL){
-        os << ind;
+        //os << ind;
         inode->toXml(os);
       }
     }
     for ( Line* line : lines_ ){
       if (line != NULL){
-        os << ind;
+        //os << ind;
         line->toXml(os);
       }
     }
-    ++ind;
-    os << ind << "</net>" << endl;
+    indent--;
+    os << indent << "</net>" << endl;
   }
 
 

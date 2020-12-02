@@ -40,8 +40,8 @@ namespace Netlist {
                   bool                 connect         ( const std::string& name, Net * );
                   void                 add             ( Term* );
                   void                 remove          ( Term* );
-    inline        void                 setPosition     ( const Point& );
-    inline        void                 setPosition     ( int x, int y );
+    /*inline*/    void                 setPosition     ( const Point& );
+    /*inline*/    void                 setPosition     ( int x, int y );
     
     /* Parser */
                   void                 toXml           ( std::ostream& );
@@ -53,8 +53,8 @@ namespace Netlist {
   inline        Cell*               Instance::getCell       ()                 const  { return owner_; }
   inline  const std::vector<Term*>& Instance::getTerms      ()                 const  { return terms_; }
   inline        Point               Instance::getPosition   ()                 const  { return position_; }
-  inline        void                Instance::setPosition   ( const Point& p )        { position_ = p; }
-  inline        void                Instance::setPosition   ( int x, int y )          { position_ = Point(x, y); }
+//inline        void                Instance::setPosition   ( const Point& p )        { position_ = p; }
+//inline        void                Instance::setPosition   ( int x, int y )          { position_ = Point(x, y); }
 
 }
 
