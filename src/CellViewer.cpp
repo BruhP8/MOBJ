@@ -7,6 +7,9 @@
 namespace Netlist
 {
   
+  /* Constructeur de CellViewer
+   * 
+   * */
   CellViewer::CellViewer( QWidget* parent )
   : QMainWindow(parent)
   , cellWidget_(NULL)
@@ -18,7 +21,14 @@ namespace Netlist
     setCentralWidget( cellWidget_ );
     QMenu* fileMenu = menuBar()->addMenu( "&File" );
 
-    QAction* action = new QAction( "&Save As", this );
+    QAction* action = new QAction( "&Open Cell", this );
+    action->setStatusTip( "Open selected Cell ");
+    action->setShortcut( QKeySequence("CTRL+C") );
+    action->setVisible( true );
+    fileMenu->addAction( action );
+    connect( action, SIGNAL(triggered()), this, SLOT(openCell()) );
+
+    action = new QAction( "&Save As", this );
     action->setStatusTip( "Save to disk (rename) the Cell" );
     action->setShortcut( QKeySequence("CTRL+S") );
     action->setVisible( true );
@@ -33,11 +43,18 @@ namespace Netlist
     connect( action, SIGNAL(triggered()), this, SLOT(close()) );
   }
 
+
+  /*
+   * Destructeur de CellViewer
+   */
   CellViewer::~CellViewer()
   {
-    
+    //A FAIRE
   }
 
+  /*
+   * Méthode de sauvegarde d'une Cell
+   * */
   void CellViewer::saveCell()
   {
     Cell* cell = getCell();
@@ -53,6 +70,9 @@ namespace Netlist
     }
   }
 
+  /*
+   *
+   * */
   Cell* CellViewer::getCell() const
   {
     return cellWidget_->getCell();
@@ -63,9 +83,18 @@ namespace Netlist
     cellWidget_->setCell(cell);
   }
 
-
+  //A FAIRE
   void CellViewer::openCell ()
   {
+    QString name;
+    if ((name = OpenCellDialog::run()) != NULL){
+      std::cout << "[DONE] CellViewer::opendCell() : OpenCellDialog::run() name = " << name.toStdString() << std::endl;
+    }
+
+    
+    //A compléter
+
+    std::cerr << "[DONE] CellViewer::openCell() : End of Function" << std::endl;
 
   }
 

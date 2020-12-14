@@ -5,6 +5,7 @@
 #include "Cell.h"
 #include "CellWidget.h"
 #include "SaveCellDialog.h"
+#include "OpenCellDialog.h"
 
 namespace Netlist
 {
