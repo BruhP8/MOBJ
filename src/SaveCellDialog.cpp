@@ -44,8 +44,8 @@ namespace Netlist
     vLayout->addLayout( hLayout );
     setLayout( vLayout );
 
-    connect(     okButton, SIGNAL(clicked), this, SLOT(accept()) );
-    connect( cancelButton, SIGNAL(clicked), this, SLOT(reject()) );
+    connect(     okButton, SIGNAL(clicked()), this, SLOT(accept()) );
+    connect( cancelButton, SIGNAL(clicked()), this, SLOT(reject()) );
   }
 
   const QString SaveCellDialog::getCellName() const 
