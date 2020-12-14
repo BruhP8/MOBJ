@@ -51,6 +51,7 @@
                        )
 
                     set( mocIncludes  SaveCellDialog.h
+                                      OpenCellDialog.h
                                       CellWidget.h
                                       CellViewer.h
                        )
@@ -70,6 +71,7 @@
                                       TermShape.cpp
                                       Symbol.cpp
                                       Cell.cpp
+                                      OpenCellDialog.cpp
                                       SaveCellDialog.cpp
                                       CellWidget.cpp
                                       CellViewer.cpp
