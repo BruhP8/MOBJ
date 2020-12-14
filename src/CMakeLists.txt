@@ -10,9 +10,20 @@
  set (CMAKE_INSTALL_PREFIX       "../install" )
 
  find_package(LibXml2 REQUIRED)
- find_package(Qt5Core     REQUIRED)
- find_package(Qt5Gui     REQUIRED)
- find_package(Qt5Widgets     REQUIRED)
+
+ find_package(Qt5 COMPONENTS Widgets REQUIRED)
+ find_package(Qt5 COMPONENTS Core    REQUIRED)
+ find_package(Qt5 COMPONENTS Gui     REQUIRED)
+# find_package(Qt5Core     REQUIRED)
+# find_package(Qt5Gui     REQUIRED)
+# find_package(Qt5Widgets     REQUIRED)
+
+ set( mocIncludes SaveCellDialog.h
+                  CellWidget.h
+                  CellViewer.h
+    )
+
+
  set(CMAKE_AUTOMOC ON)
 
  #include(${QT_USE_FILE})
@@ -31,7 +42,11 @@
                                       Node.h
                                       Line.h
                                       Shape.h
+                                      BoxShape.h
+                                      LineShape.h
+                                      TermShape.h
                                       Symbol.h
+                                      CellViewer.h
                                       Cell.h
                        )
 
@@ -50,6 +65,9 @@
                                       Node.cpp
                                       Line.cpp
                                       Shape.cpp
+                                      BoxShape.cpp
+                                      LineShape.cpp
+                                      TermShape.cpp
                                       Symbol.cpp
                                       Cell.cpp
                                       SaveCellDialog.cpp
@@ -61,6 +79,7 @@
            qt5_wrap_cpp( mocCpps      ${mocIncludes} )
 
          add_executable( tme810       ${cpps} ${mocCpps} )
-  target_link_libraries( tme810       ${QT_LIBRARIES} ${LIBXML2_LIBRARIES} )
+  #target_link_libraries( tme810       ${QT_LIBRARIES} ${LIBXML2_LIBRARIES} )
+   target_link_libraries( tme810       ${LIBXML2_LIBRARIES} Qt5::Widgets )
                 install( TARGETS      tme810                      DESTINATION bin )
                 install( FILES        ${includes} ${mocIncludes}  DESTINATION include )

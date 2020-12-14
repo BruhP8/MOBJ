@@ -13,7 +13,11 @@ namespace Netlist {
   {}
 
   Symbol::~Symbol()
-  {}
+  {
+    for( vector<Shape*>::iterator ishape=shapes_.begin(); ishape != shapes_.end(); ++ishape ){
+      shapes_.erase(ishape);
+    }
+  }
 
   Cell* Symbol::getCell() const
   {

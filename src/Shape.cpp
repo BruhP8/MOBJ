@@ -1,11 +1,11 @@
 // -*- explicit-buffer-name: "Shape.cpp<M1-MOBJ/7>" -*-
 
+#include <libxml/xmlreader.h>
 #include "Shape.h"
 #include "BoxShape.h"
 #include "TermShape.h"
 #include "LineShape.h"
 #include "XmlUtil.h"
-#include <libxml/xmlreader.h>
 
 namespace Netlist {
 
