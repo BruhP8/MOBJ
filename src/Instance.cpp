@@ -110,12 +110,32 @@ namespace Netlist {
 
   void Instance::setPosition ( const Point& p )
   {
+    position_.setX(p.getX());
+    position_.setY(p.getY());
 
+    /* Pour chaque Term contenu dans le vecteur :
+     * 1- on commence par récupérer la position du TermShape dans le symbol
+     * 2- on translate cette position de la position de l'instance
+     * 3- et on déplace le Term */
+    for(Term* t : terms_){
+      Point pos = owner_->getSymbol()->getTermPosition(t);
+      pos.translate(p.getX(), p.getY());
+      t->setPosition(pos);
+    }
+    
   }
 
+  /* Idem avec x et y */
   void Instance::setPosition ( int x, int y )
   {
-    
+    position_.setX(x);
+    position_.setY(y);
+  
+    for(Term* t : terms_){
+      Point pos = owner_->getSymbol()->getTermPosition(t);
+      pos.translate(x, y);
+      t->setPosition(pos);
+    }
   }
 
   /*------------------------------------------------------------------*
@@ -163,7 +183,7 @@ namespace Netlist {
     //cout << "MasterCell : " << cellName << endl;
     Cell* masterCell = Cell::find(cellName);
     if (masterCell == NULL){
-      cerr << "[ERROR] Instance::fromXml(): no masterCell found" << endl;
+      cerr << "[ERROR] Instance::fromXml(): no masterCell " << cellName << " found" << endl;
     }
 
 
