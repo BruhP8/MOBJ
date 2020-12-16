@@ -24,6 +24,60 @@ namespace Netlist {
     return owner_;
   }
 
+  Box Symbol::getBoundingBox() const
+  {
+    if (shapes_.empty()){
+      return Box(0, 0, 0, 0);
+    }
+    int x1 = shapes_[0]->getBoundingBox().getX1();
+    int y1 = shapes_[0]->getBoundingBox().getY1();
+    int x2 = shapes_[0]->getBoundingBox().getX2();
+    int y2 = shapes_[0]->getBoundingBox().getY2();
+    for(Shape* s : shapes_){
+      Box b = s->getBoundingBox();
+      if (x1 > b.getX1()){
+        x1 = b.getX1();
+      }
+      if (y1 > b.getY1()){
+        y1 = b.getY1();
+      }
+      if (x2 < b.getX2()){
+        x2 = b.getX2();
+      }
+      if (y2 < b.getY2()){
+        y2 = b.getY2();
+      }
+    }
+    return Box(x1, y1, x2, y2);
+  }
+
+  Point Symbol::getTermPosition( Term* term ) const
+  {
+    //TermShape* tsh = NULL;
+    for(Shape* s : shapes_){
+      if( TermShape* tsh = dynamic_cast<TermShape*>(s) ){
+        if ( tsh->getTerm() == term ){
+          return Point(tsh->getX(), tsh->getY());
+        }
+      }
+    }
+    cout << "Symbol::getTermPosition() : TermShape not found" << endl;
+    return Point(-1, -1);
+  }
+
+  TermShape* Symbol::getTermShape ( Term* term ) const
+  {
+    for(Shape* s : shapes_){
+      if( TermShape* tsh = dynamic_cast<TermShape*>(s) ){
+        if ( tsh->getTerm() == term ){
+          return tsh;
+        }
+      }
+    }
+    cout << "Symbol::getTermShape() : TermShape not found" << endl;
+    return NULL;
+  }
+
   void  Symbol::add ( Shape* sh ){
     if ( sh ){
       shapes_.push_back(sh);
@@ -55,6 +109,8 @@ namespace Netlist {
 
   Symbol* Symbol::fromXml( Cell* cell, xmlTextReaderPtr reader ){
     
+    const xmlChar* symbTag  = xmlTextReaderConstString( reader, (const xmlChar*)"symbol" );
+
     cout << "Beginning of Symbol::fromXml()" << endl;
 
     Symbol* symbol = NULL;
@@ -86,6 +142,9 @@ namespace Netlist {
       }
 
       const xmlChar* nodeName = xmlTextReaderConstLocalName( reader );
+      if (nodeName == symbTag){
+        break;
+      }
 
       cout << "-- Symbol::fromXml() : " << nodeName << endl;
 

@@ -97,7 +97,9 @@ namespace Netlist {
 
       cout << "-- new TermShape created !" << endl;
     }
-
+    else {
+      cerr << "[ERROR] Term::fromXml() : not in <term> but <" << nodeName << ">" << endl;
+    }
     return tsh;
 
   }
