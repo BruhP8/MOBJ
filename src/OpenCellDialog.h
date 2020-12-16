@@ -1,3 +1,6 @@
+#ifndef  NETLIST_OPENCELLDIALOG_H
+#define NETLIST_OPENCELLDIALOG_H
+
 #include <QDialog>
 #include <QLineEdit>
 
@@ -17,3 +20,5 @@ namespace Netlist {
       QLineEdit*    lineEdit_;
   };
 }
+
+#endif  // NETLIST_OPENCELLDIALOG_H

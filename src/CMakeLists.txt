@@ -32,7 +32,7 @@
                          ${LIBXML2_INCLUDE_DIR}
                        )
 
-                    set( includes     Indentation.h
+                     set( includes     Indentation.h
                                       XmlUtil.h 
                                       Point.h
                                       Box.h
@@ -48,12 +48,10 @@
                                       LineShape.h
                                       TermShape.h
                                       Symbol.h
-                                      CellViewer.h
                                       Cell.h
                        )
 
                     set( mocIncludes  SaveCellDialog.h
-                                      OpenCellDialog.h
                                       CellWidget.h
                                       CellViewer.h
                        )
@@ -75,8 +73,8 @@
                                       TermShape.cpp
                                       Symbol.cpp
                                       Cell.cpp
-                                      OpenCellDialog.cpp
                                       SaveCellDialog.cpp
+                                      OpenCellDialog.cpp
                                       CellWidget.cpp
                                       CellViewer.cpp
                                       Main.cpp

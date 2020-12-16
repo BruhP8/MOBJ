@@ -1,11 +1,13 @@
-#include <libxml/xmlreader.h>
-#include <QWidget>
-#include <QWindow>
+//#include <libxml/xmlreader.h>
+//#include <QWidget>
+//#include <QWindow>
 #include <QMainWindow>
 #include "Cell.h"
 #include "CellWidget.h"
 #include "SaveCellDialog.h"
 #include "OpenCellDialog.h"
+//#include "CellsLib.h"
+//#include "InstancesWidget.h"
 
 namespace Netlist
 {
@@ -13,7 +15,8 @@ namespace Netlist
   class CellViewer : public QMainWindow {
     
     //class SaveCellDialog;
-    
+    //class OpenCellDialog;
+
     Q_OBJECT;
   public:
                       CellViewer          ( QWidget* parent=NULL );

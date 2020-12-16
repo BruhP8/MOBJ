@@ -3,13 +3,18 @@
 
 #include "CellViewer.h"
 //#include "SaveCellDialog.h"
+//#include "OpenCellDialog.h"
 
 namespace Netlist
 {
   
-  /* Constructeur de CellViewer
-   * 
-   * */
+  /*------------------------------------------------------------------*
+   * Constructeur de CellViewer                                       *
+   * - crée une barre de menu                                         *
+   * - ajoute des entrées du menu                                     *
+   * - affecte des actions à ces entrée                               *
+   * STATUS   --  DONE                                                *
+   *------------------------------------------------------------------*/
   CellViewer::CellViewer( QWidget* parent )
   : QMainWindow(parent)
   , cellWidget_(NULL)
@@ -70,31 +75,52 @@ namespace Netlist
     }
   }
 
-  /*
-   *
-   * */
+  /*------------------------------------------------------------------*
+   * Getteur sur la Cell                                              *
+   * - Appelle la méthode getCell de CellWidget                       *
+   * STATUS   --  DONE                                                *
+   *------------------------------------------------------------------*/
   Cell* CellViewer::getCell() const
   {
     return cellWidget_->getCell();
   }
 
+  /*------------------------------------------------------------------*
+   * Affectation d'une Cell                                           *
+   * - Appelle la méthode setCell de CellWidget                       *
+   * STATUS   --  DONE                                                *
+   *------------------------------------------------------------------*/
   void CellViewer::setCell ( Cell* cell )
   {
     cellWidget_->setCell(cell);
   }
 
-  //A FAIRE
+  /*------------------------------------------------------------------*
+   * Ouverture d'une Cell                                             *
+   * - Récupère le nom de la cell à charger dans le lineEdit          *
+   * - Affiche le nom de sa mastercell                                *
+   * STATUS   --  TODO                                                *
+   *------------------------------------------------------------------*/
   void CellViewer::openCell ()
   {
     QString name;
     if ((name = OpenCellDialog::run()) != NULL){
-      std::cout << "[DONE] CellViewer::opendCell() : OpenCellDialog::run() name = " << name.toStdString() << std::endl;
+      std::cout << "[DONE] CellViewer::openCell() : OpenCellDialog::run() name = " << name.toStdString() << std::endl;
     }
-
-    
+    Cell* cell = NULL;
+    if ( (cell = Cell::find(name.toStdString())) == NULL){
+      cell = Cell::load(name.toStdString());
+      if (cell == NULL){
+        std::cerr << "[ERROR] CellViewer::openCell() : cell not found" << std::endl;
+        return;
+      }
+    }
     //A compléter
+    cellWidget_->setCell(cell);
+    std::cout << "[DONE] CellViewer::openCell() : End of Function" << std::endl;
 
-    std::cerr << "[DONE] CellViewer::openCell() : End of Function" << std::endl;
+    QAction* action = new QAction( "&CellLoaded", this );
+    connect( action, SIGNAL(cellLoaded()), this, SLOT(CellModels::updateDatas()) );
 
   }
 

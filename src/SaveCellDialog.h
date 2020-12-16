@@ -1,3 +1,6 @@
+#ifndef NETLIST_SAVECELLDIALOG_H
+#define NETLIST_SAVECELLDIALOG_H
+
 #include <QDialog>
 #include <QLineEdit>
 //#include "CellViewer.h"
@@ -18,3 +21,5 @@ namespace Netlist{
     
     };
 }
+
+#endif  // NETLIST_SAVECELLDIALOG_H
