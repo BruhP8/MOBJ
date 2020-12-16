@@ -42,7 +42,9 @@
                                       Node.h
                                       Line.h
                                       Shape.h
+                                      ArcShape.h
                                       BoxShape.h
+                                      EllipseShape.h
                                       LineShape.h
                                       TermShape.h
                                       Symbol.h
@@ -66,7 +68,9 @@
                                       Node.cpp
                                       Line.cpp
                                       Shape.cpp
+                                      ArcShape.cpp
                                       BoxShape.cpp
+                                      EllipseShape.cpp
                                       LineShape.cpp
                                       TermShape.cpp
                                       Symbol.cpp

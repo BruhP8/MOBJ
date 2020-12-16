@@ -38,19 +38,19 @@ namespace Netlist
       int x2 = 0;
       int y2 = 0;
       if (! xmlGetIntAttribute( reader, "x1", x1)){
-        cerr << "[ERROR] LineShape::fromXml() : argument not found" << endl;
+        cerr << "[ERROR] LineShape::fromXml() : argument x1 not found" << endl;
         return lsh;
       }
       if (! xmlGetIntAttribute( reader, "y1", y1)){
-        cerr << "[ERROR] LineShape::fromXml() : argument not found" << endl;
+        cerr << "[ERROR] LineShape::fromXml() : argument y1 not found" << endl;
         return lsh;
       }
       if (! xmlGetIntAttribute( reader, "x2", x2)){
-        cerr << "[ERROR] LineShape::fromXml() : argument not found" << endl;
+        cerr << "[ERROR] LineShape::fromXml() : argument x2 not found" << endl;
         return lsh;
       }
       if (! xmlGetIntAttribute( reader, "y2", y2)){
-        cerr << "[ERROR] LineShape::fromXml() : argument not found" << endl;
+        cerr << "[ERROR] LineShape::fromXml() : argument y2 not found" << endl;
         return lsh;
       }
 

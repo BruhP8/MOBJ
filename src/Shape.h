@@ -11,11 +11,11 @@
 namespace Netlist {
 
   //class Symbol;
+  class ArcShape;
   class BoxShape;
   class LineShape;
   class TermShape;
-  //class EllipseShape;
-  //class ArcShape;
+  class EllipseShape;
 
   class Symbol;
 
