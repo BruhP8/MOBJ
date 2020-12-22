@@ -54,7 +54,8 @@ namespace Netlist {
 
 
   inline Cell* CellWidget::getCell () const { return cell_; }
-
+  inline QRect CellWidget::boxToScreenRect ( const Box& box ) const 
+  { return QRect( QPoint(box.getX1(), box.getY2()), QPoint(box.getX2(), box.getY1()) ); }
 
 }  // Netlist namespace.
 
