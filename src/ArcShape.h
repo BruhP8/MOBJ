@@ -19,10 +19,14 @@ namespace Netlist
                         ArcShape        ( Symbol* s, int x1, int y1, int x2, int y2, int start, int span );
                        ~ArcShape        ();
               Box       getBoundingBox  () const;
+      inline  int       startAngle      () const;
+      inline  int       spanAngle       () const;
       static  ArcShape* fromXml         ( Symbol*, xmlTextReaderPtr );
               void      toXml           ( std::ostream& );
   };
 
+  inline  int  ArcShape::startAngle() const { return 16*start_; }
+  inline  int  ArcShape::spanAngle () const { return 16*span_; }
 } // namespace Netlist
 
 #endif
