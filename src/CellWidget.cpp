@@ -3,6 +3,7 @@
 #include  <QResizeEvent>
 #include  <QPainter>
 #include  <QPen>
+//#include  <QColor>
 #include  <QBrush>
 #include  <QFont>
 #include  <QApplication>
@@ -11,6 +12,8 @@
 #include  "Instance.h"
 #include  "Symbol.h"
 #include  "Shape.h"
+#include  "ArcShape.h"
+#include  "EllipseShape.h"
 #include  "Cell.h"
 #include  "Line.h"
 #include  "Node.h"
@@ -97,10 +100,43 @@ namespace Netlist {
     //painter.setBrush( QBrush( Qt::red ) );
     //QRect rect2 = boxToScreenRect(viewport_);
     //painter.drawRect( rect2 );
-    if (cell_->getSymbol()){
-      painter.setPen( QPen( Qt::red, 1 ) );
-      QRect rect2 = boxToScreenRect( cell_->getSymbol()->getBoundingBox() );
+
+    /*Affichage du contenu de la Cell*/
+    Symbol* symbol = cell_->getSymbol();
+    if (symbol){
+      painter.setPen( QPen( Qt::blue, 3 ) );
+      QRect rect2 = boxToScreenRect( symbol->getBoundingBox() );
       painter.drawRect( rect2 );
+      painter.setPen( QPen( Qt::magenta, 3 ) );
+      for( Shape* sh : symbol->getShapes() ){
+        QRect rect3 = boxToScreenRect( sh->getBoundingBox() );
+
+        
+        if (ArcShape* arcSh = dynamic_cast<ArcShape*>(sh)){
+          painter.setPen( QPen( Qt::green, 2 ) );
+          painter.drawArc( rect3, arcSh->startAngle(), arcSh->spanAngle() );
+          std::cout << "[CELL_WIDGET] drawing ArcShape : start=" << arcSh->startAngle()
+                    << " span=" << arcSh->spanAngle() << std::endl;
+          //painter.setPen( QPen( Qt::red, 3) );
+          //painter.drawRect( rect4 );
+          painter.setPen( QPen( Qt::magenta, 3 ) );
+        }
+
+        
+        if (EllipseShape* esh = dynamic_cast<EllipseShape*>(sh)){
+          painter.setPen( QPen( Qt::darkMagenta, 2 ) );
+          painter.drawEllipse( rect3 );
+          //painter.setPen( QPen( Qt::magenta, 3 ) );
+        }
+        
+        else {
+          if (sh){
+            
+            painter.drawRect(rect3);
+          }
+        }
+
+      }
     }
 
     int frameWidth  = 460;
