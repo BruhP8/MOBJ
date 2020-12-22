@@ -1,5 +1,5 @@
 #include <QAction>
-
+#include <iostream>
 #include "CellsModel.h"
 
 namespace Netlist {
@@ -12,8 +12,10 @@ namespace Netlist {
   {}
 
   //A VERIFIER
-  void CellsModel::updateData()
+  void CellsModel::updateDatas()
   {
+
+    std::cout << "[SLOT] CellsModel::updateDatas() : signal received" << std::endl;
     QAction* action = new QAction( "&Update Data", this);
     connect( action, SIGNAL(layoutChanged()), this, NULL);
   }

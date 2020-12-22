@@ -13,7 +13,7 @@ namespace Netlist {
      ~CellsModel();
 
     public slots :
-      void  updateData();
+      void  updateDatas();
 
   };
 

@@ -16,7 +16,6 @@
 #include  "Node.h"
 #include  "Net.h"
 
-
 namespace Netlist {
 
   using namespace std;
@@ -66,11 +65,20 @@ namespace Netlist {
 
 
   void  CellWidget::resizeEvent ( QResizeEvent* event )
-  { repaint(); }
+  { 
+    const QSize& size = event->size();
+
+    viewport_.setX2( viewport_.getX1() + size.width() );
+    viewport_.setY1( viewport_.getY2() - size.height() );  
+    
+    cerr << "CellWidget::resizeEvent() viewport_:" << viewport_ << endl;
+    //repaint(); 
+  }
 
 
   void  CellWidget::paintEvent ( QPaintEvent* event )
   {
+
     QFont  bigFont = QFont( "URW Bookman L", 36 );
 
     QString cellName = "NULL";
@@ -80,6 +88,15 @@ namespace Netlist {
     painter.setFont      ( bigFont );
     painter.setBackground( QBrush( Qt::black ) );
     painter.eraseRect    ( QRect( QPoint(0,0), size() ) );
+
+    painter.setPen( QPen( Qt::darkGreen, 1) );
+    QRect rect1 = boxToScreenRect(viewport_);
+    painter.drawRect( rect1 );
+
+    painter.setPen( QPen( Qt::red, 0) );
+    painter.setBrush( QBrush( Qt::red ) );
+    QRect rect2 = boxToScreenRect(viewport_);
+    painter.drawRect( rect2 );
 
     int frameWidth  = 460;
     int frameHeight = 100;
@@ -92,6 +109,70 @@ namespace Netlist {
     painter.drawRect( nameRect );
     painter.drawText( nameRect, Qt::AlignCenter, cellName );
   }
+
+  void CellWidget::keyPressedEvent( QKeyEvent* event )
+  {
+    event->ignore();
+    if (event->modifiers() & (Qt::ControlModifier|Qt::ShiftModifier))
+      return;
+
+    switch( event->key() ){
+      case Qt::Key_Up     : goUp();    break;
+      case Qt::Key_Down   : goDown();   break;
+      case Qt::Key_Left   : goLeft();   break;
+      case Qt::Key_Right  : goRight();  break;
+      default             : return;
+    }
+    event->accept();
+  }
+
+  void CellWidget::goRight() 
+  {
+    viewport_.translate( Point(20, 0) );
+    repaint();
+  }
+
+  void CellWidget::goUp()
+  {
+    viewport_.translate( Point(0, 20) );
+    repaint();
+  }
+
+  void CellWidget::goLeft()
+  {
+    viewport_.translate( Point(-20, 0) );
+    repaint();
+  }
+
+  void CellWidget::goDown()
+  {
+    viewport_.translate( Point(0, -20) );
+    repaint();
+  }
+
+  //void CellWidget::query( unsigned int flags, QPainter& painter )
+  //{
+  //  if ( (not cell_) or (not flags) ) return;
+//
+  //  const vector<Instance*>& instances = cell->getInstances();
+  //  for( size_t i; i < instances.size(); ++i ){
+  //    Point instPos = instances[i]->getPosition();
+  //    const Symbol* symbol = instances[i]->getMasterCell()->getSymbol();
+  //    if (not symbol) continue;
+//
+  //    if (flages & InstanceShapes){
+  //      const vector<Shape*>& shapes = symbol->getShapes();
+  //      for( size_t j = 0; j <= shapes.size(); ++j ){
+  //        BoxShape* boxShape = dynamic_cast<BoxShape*>(shapes[j]);
+  //        if (boxShape){
+  //          Box box = boxShape->getBoundingBox();
+  //          QRect rect = boxToScreenRect(box.translate(instPos));
+  //          painter.drawRect(rect);
+  //        }
+  //      }
+  //    }
+  //  }
+  //}
 
 
 }  // Netlist namespace.

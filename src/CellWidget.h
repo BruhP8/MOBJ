@@ -26,29 +26,30 @@ namespace Netlist {
               void    setCell             ( Cell* );
       inline  Cell*   getCell             ()                 const;
 
-    //  inline  int     xToScreenX          ( int x )          const;
-    //  inline  int     yToScreenY          ( int y )          const;
-    //  inline  QRect   boxToScreenRect     ( const Box& )     const;
-    //  inline  QPoint  pointToScreenPoint  ( const Point& )   const;
-    //  inline  int     screenXToX          ( int x )          const;
-    //  inline  int     screenYToY          ( int y )          const;
-    //  inline  Box     screenRectToBox     ( const QRect& )   const;
-    //  inline  Point   screenPointToPoint  ( const QPoint& )  const;
+      inline  int     xToScreenX          ( int x )          const;
+      inline  int     yToScreenY          ( int y )          const;
+      inline  QRect   boxToScreenRect     ( const Box& )     const;
+      inline  QPoint  pointToScreenPoint  ( const Point& )   const;
+      inline  int     screenXToX          ( int x )          const;
+      inline  int     screenYToY          ( int y )          const;
+      inline  Box     screenRectToBox     ( const QRect& )   const;
+      inline  Point   screenPointToPoint  ( const QPoint& )  const;
 
       virtual QSize   minimumSizeHint     () const;
       virtual void    resizeEvent         ( QResizeEvent* );
     protected:
       virtual void    paintEvent          ( QPaintEvent* );
-    //  virtual void    keyPressedEvent     ( QKeyEvent* );
+      virtual void    keyPressedEvent     ( QKeyEvent* );
 
-    //public slots:
-    //          void    goLeft              ();
-    //          void    goRight             ();
-    //          void    goUp                ();
-    //          void    goDown              ();
+    public slots:
+              void    goLeft              ();
+              void    goRight             ();
+              void    goUp                ();
+              void    goDown              ();
 
     private:
       Cell* cell_;
+      Box   viewport_;
   };
 
 

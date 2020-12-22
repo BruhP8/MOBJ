@@ -1,17 +1,20 @@
 //#include <QWidget>
-//#include <QTableView>
-//#include <QPushButton>
+#include <QTableView>
+#include <QPushButton>
 
-#include "CellViewer.h"
+//#include "CellViewer.h"
 #include "CellsModel.h"
 
 namespace Netlist {
 
+  class CellViewer;
+
   class CellsLib : public QWidget {
     Q_OBJECT;
-    
+
     public :
                           CellsLib        ( QWidget* parent=NULL );
+                         ~CellsLib        ();
       void                setCellViewer   ( CellViewer* );
       int                 getSelectedRow  () const;
       inline CellsModel*  getBaseModel    ();

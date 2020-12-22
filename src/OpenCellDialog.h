@@ -18,6 +18,10 @@ namespace Netlist {
               void      setCellName   ( const QString& name );
     protected :
       QLineEdit*    lineEdit_;
+    
+    signals:
+      void cellLoaded();
+
   };
 }
 

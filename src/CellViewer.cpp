@@ -2,6 +2,8 @@
 #include <QMenuBar>
 
 #include "CellViewer.h"
+#include "CellsLib.h"
+#include "InstancesWidget.h"
 //#include "SaveCellDialog.h"
 //#include "OpenCellDialog.h"
 
@@ -12,19 +14,36 @@ namespace Netlist
    * Constructeur de CellViewer                                       *
    * - crée une barre de menu                                         *
    * - ajoute des entrées du menu                                     *
-   * - affecte des actions à ces entrée                               *
+   * - affecte des actions à ces entrées                              *
    * STATUS   --  DONE                                                *
    *------------------------------------------------------------------*/
   CellViewer::CellViewer( QWidget* parent )
   : QMainWindow(parent)
   , cellWidget_(NULL)
+  , cellsLib_(NULL)
+  , instancesWidget_(NULL)
   , saveCellDialog_(NULL)
   {
+    std::cout << "[CELL_VIEWER] : Beginning of constructor" << std::endl;
+
     cellWidget_ = new CellWidget();
+    std::cout << "[CELL_VIEWER] : CellWidget created" << std::endl;
+
     saveCellDialog_ = new SaveCellDialog( this );
+    std::cout << "[CELL_VIEWER] : SaveCellDialog created" << std::endl;
+
+    cellsLib_->setCellViewer(this);
+
+    std::cout << "[CELL_VIEWER] : cellsLib_->setCellViewer DONE" << std::endl;
+
+    instancesWidget_->setCellViewer(this);
+
+    std::cout << "[CELL_VIEWER] : First Part DONE" << std::endl;
 
     setCentralWidget( cellWidget_ );
     QMenu* fileMenu = menuBar()->addMenu( "&File" );
+
+    std::cout << "[CELL_VIEWER] : Second part (Creation of QMenu) DONE" << std::endl;
 
     QAction* action = new QAction( "&Open Cell", this );
     action->setStatusTip( "Open selected Cell ");
@@ -46,6 +65,12 @@ namespace Netlist
     action->setVisible(true);
     fileMenu->addAction( action );
     connect( action, SIGNAL(triggered()), this, SLOT(close()) );
+    
+    std::cout << "[CELL_VIEWER] : End of constructor" << std::endl;
+    
+    //QObject::connect( this, SIGNAL(cellLoaded()), this, SLOT(cellsLib_->getBaseModel()->updateDatas()) );
+
+    //action = new QAction( "&CellLoaded", this );
   }
 
 
@@ -93,6 +118,7 @@ namespace Netlist
   void CellViewer::setCell ( Cell* cell )
   {
     cellWidget_->setCell(cell);
+
   }
 
   /*------------------------------------------------------------------*
@@ -117,11 +143,20 @@ namespace Netlist
     }
     //A compléter
     cellWidget_->setCell(cell);
-    std::cout << "[DONE] CellViewer::openCell() : End of Function" << std::endl;
+    std::cout << "[DONE] CellViewer::openCell() : End of Function" << std::endl;    
+    emit cellLoaded();
+  }
 
-    QAction* action = new QAction( "&CellLoaded", this );
-    connect( action, SIGNAL(cellLoaded()), this, SLOT(CellModels::updateDatas()) );
+  void CellViewer::showCellsLib()
+  {
+    cellsLib_->show();
+    update();
+  }
 
+  void CellViewer::showInstancesWidget()
+  {
+    instancesWidget_->show();
+    update();
   }
 
 } // namespace netlist
