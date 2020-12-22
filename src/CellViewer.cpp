@@ -32,10 +32,12 @@ namespace Netlist
     saveCellDialog_ = new SaveCellDialog( this );
     std::cout << "[CELL_VIEWER] : SaveCellDialog created" << std::endl;
 
+    cellsLib_ = new CellsLib(parent);
     cellsLib_->setCellViewer(this);
 
     std::cout << "[CELL_VIEWER] : cellsLib_->setCellViewer DONE" << std::endl;
 
+    instancesWidget_= new InstancesWidget(parent);
     instancesWidget_->setCellViewer(this);
 
     std::cout << "[CELL_VIEWER] : First Part DONE" << std::endl;
@@ -65,6 +67,20 @@ namespace Netlist
     action->setVisible(true);
     fileMenu->addAction( action );
     connect( action, SIGNAL(triggered()), this, SLOT(close()) );
+
+    action = new QAction( "&Show CellsLib", this);
+    action->setStatusTip( "Show the Cell library" );
+    action->setShortcut( QKeySequence("CTRL+L") );
+    action->setVisible(true);
+    fileMenu->addAction( action );
+    connect( action, SIGNAL(triggered()), this, SLOT(showCellsLib()) );
+
+    action = new QAction( "&Show InstancesWidget", this);
+    action->setStatusTip( "Show the Instance Widget" );
+    action->setShortcut( QKeySequence("CTRL+I") );
+    action->setVisible(true);
+    fileMenu->addAction( action );
+    connect( action, SIGNAL(triggered()), this, SLOT(showInstancesWidget()) );
     
     std::cout << "[CELL_VIEWER] : End of constructor" << std::endl;
     
@@ -155,7 +171,9 @@ namespace Netlist
 
   void CellViewer::showInstancesWidget()
   {
+    std::cout << "[BEFORE] CellViewer::showInstancesWidget: show()" << std::endl;
     instancesWidget_->show();
+    std::cout << "[AFTER] CellViewer::showInstancesWidget: show()" << std::endl;
     update();
   }
 
