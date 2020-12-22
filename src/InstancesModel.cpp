@@ -59,5 +59,4 @@ namespace Netlist {
     return QVariant();
   }
 
-
 }

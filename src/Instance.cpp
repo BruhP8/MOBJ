@@ -184,6 +184,11 @@ namespace Netlist {
     Cell* masterCell = Cell::find(cellName);
     if (masterCell == NULL){
       cerr << "[ERROR] Instance::fromXml(): no masterCell " << cellName << " found" << endl;
+      cout << "[SOLUTION] Instance::fromXml(): try to load " << cellName << endl;
+      masterCell = Cell::load( cellName );
+      if (masterCell == NULL){
+        cerr << "[ERROR] Instance::fromXml(): unfortunately, unable to load " << cellName << endl;
+      }
     }
 
 

@@ -13,11 +13,12 @@ namespace Netlist {
   , view_       ( new QTableView(this) )
   , load_       ( new QPushButton(this) )
   {
+
     setAttribute( Qt::WA_QuitOnClose,   false );
     setAttribute( Qt::WA_DeleteOnClose, false );
     setContextMenuPolicy( Qt::ActionsContextMenu );
 
-    view_->setShowGrid              ( false );
+    view_->setShowGrid              ( true );
     view_->setAlternatingRowColors  ( true );
     view_->setSelectionBehavior     ( QAbstractItemView::SelectRows );
     view_->setSelectionMode         ( QAbstractItemView::SingleSelection );
@@ -31,8 +32,13 @@ namespace Netlist {
 
     QHeaderView* verticalHeader = view_->verticalHeader();
     verticalHeader->setVisible( false );
+
+    std::string wName = "InstancesWidget";
+    setWindowTitle( QString(wName.c_str()) );
+
     load_->setText( "Load" );
     connect( load_, SIGNAL(clicked()), this, SLOT(load()) );
+    std::cout << "[INSTANCESWIDGET] Constructor : OK" << std::endl;
   }
 
   /*A FAIRE*/
@@ -40,12 +46,12 @@ namespace Netlist {
   {
     //std::cout << "InstancesWidget::setCellViewer() : just before setEnabled" << std::endl;
     //setEnabled(false);
-    //std::cout << "InstancesWidget::setCellViewer() : just after setEnabled" << std::endl;
-    //if (cell == NULL){
-    //  std::cerr << "[ERROR] InstancesWidget::setCellViewer: nullptr" << std::endl;
-    //}
-    //std::cout << "InstancesWidget::setCellViewer() : cellViewer_" << std::endl;
-    //cellViewer_ = cell;
+    std::cout << "InstancesWidget::setCellViewer() : just after setEnabled" << std::endl;
+    if (cell == NULL){
+      std::cerr << "[ERROR] InstancesWidget::setCellViewer: nullptr" << std::endl;
+    }
+    std::cout << "InstancesWidget::setCellViewer() : cellViewer_" << std::endl;
+    cellViewer_ = cell;
     //setEnabled(true);
     //update();
   }
