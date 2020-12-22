@@ -18,12 +18,15 @@ using namespace Netlist;
 
 int main ( int argc, char* argv[] )
 {
+  std::cout << "[MAIN] : Creation of QApplication" << std::endl;
   QApplication* qa = new QApplication(argc, argv);
 
+  std::cout << "[MAIN] : Creation of CellViewer" << std::endl;
   CellViewer* viewer = new CellViewer();
   //viewer->setCell( halfadder );
   viewer->show();
 
+  std::cout << "[MAIN] : Execution of QApplication" << std::endl;
   int rvalue = qa->exec();
   delete qa;
   return rvalue;

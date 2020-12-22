@@ -54,11 +54,12 @@ namespace Netlist {
     }if (termTag == nodeName){
       cout << "TermShape" << endl;
       shape = TermShape::fromXml( owner, reader );
-
-    }if (shape == NULL)
+    }if (shape == NULL){
       cerr << "[ERROR] Shape::fromXml() : Unknown or misplaced tag <" << nodeName << "> (line:"
            << xmlTextReaderGetParserLineNumber(reader) << ")." << endl;
-
+    } else {
+      cerr << "[END] Shape::fromXml() : I'm in <" << nodeName << ">" << endl;
+    }
     return shape;
   }
 

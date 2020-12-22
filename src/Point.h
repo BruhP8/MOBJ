@@ -25,7 +25,7 @@ namespace Netlist {
   };
 
   inline         Point::Point     () : x_(0), y_(0) { }
-  inline         Point::Point     ( int x, int y) : x_(x), y_(y) { }
+  inline         Point::Point     ( int x, int y ) : x_(x), y_(y) { }
   inline  int    Point::getX      () const { return x_; }
   inline  int    Point::getY      () const { return y_; }
   inline  Point& Point::setX      ( int x )  { x_ = x; return *this; }

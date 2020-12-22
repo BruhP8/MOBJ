@@ -56,12 +56,13 @@ namespace Netlist {
     //TermShape* tsh = NULL;
     for(Shape* s : shapes_){
       if( TermShape* tsh = dynamic_cast<TermShape*>(s) ){
-        if ( tsh->getTerm() == term ){
+        if ( term == tsh->getTerm() ){
+          cout << "[DONE] Symbol::getTermPosition() : TermShape OK" << endl;
           return Point(tsh->getX(), tsh->getY());
         }
       }
     }
-    cout << "Symbol::getTermPosition() : TermShape not found" << endl;
+    cout << "[Warning] Symbol::getTermPosition() : nothing happened" << endl;
     return Point(-1, -1);
   }
 
@@ -126,11 +127,14 @@ namespace Netlist {
 
     while(xmlTextReaderNodeType( reader ) != XML_READER_TYPE_END_ELEMENT){
 
+      std::cout << "--Symbol::fromXml() : While Loop (construction of Shapes)" << std::endl;
+
       int status = xmlTextReaderRead(reader);
       if (status != 1) {
         if (status != 0) {
-          cerr << "[ERROR] Cell::fromXml(): Unexpected termination of the XML parser." << endl;
+          cerr << "[ERROR] Symbol::fromXml(): Unexpected termination of the XML parser." << endl;
         }
+        cerr << "[ERROR] Symbol::fromXml(): Unexpected termination of the XML parser." << endl;
         break;
       }
 
@@ -143,6 +147,7 @@ namespace Netlist {
 
       const xmlChar* nodeName = xmlTextReaderConstLocalName( reader );
       if (nodeName == symbTag){
+        cerr << "[END] Symbol::fromXml(): current nodeName is Symbol." << endl;
         break;
       }
 

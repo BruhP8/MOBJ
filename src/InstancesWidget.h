@@ -1,9 +1,13 @@
 #include <QTableView>
 #include <QPushButton>
-#include "CellViewer.h"
-#include "InstancesModel.h"
+//#include "CellViewer.h"
+//#include "InstancesModel.h"
+#include "Cell.h"
 
 namespace Netlist {
+
+  class CellViewer;
+  class InstancesModel;
 
   class InstancesWidget : public QWidget {
       Q_OBJECT;
@@ -11,7 +15,7 @@ namespace Netlist {
                     InstancesWidget ( QWidget* parent=NULL );
               void  setCellViewer   ( CellViewer* );
               int   getSelectedRow  () const;
-      inline  void  setCell         ( Cell* );
+              void  setCell         ( Cell* );
 
     public slots :
       void load ();

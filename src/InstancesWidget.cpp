@@ -1,6 +1,8 @@
 #include <QHeaderView>
-
+#include <iostream>
 #include "InstancesWidget.h"
+#include "InstancesModel.h"
+#include "CellViewer.h"
 
 namespace Netlist {
 
@@ -33,9 +35,19 @@ namespace Netlist {
     connect( load_, SIGNAL(clicked()), this, SLOT(load()) );
   }
 
+  /*A FAIRE*/
   void InstancesWidget::setCellViewer( CellViewer* cell )
   {
-    cellViewer_ = cell;
+    //std::cout << "InstancesWidget::setCellViewer() : just before setEnabled" << std::endl;
+    //setEnabled(false);
+    //std::cout << "InstancesWidget::setCellViewer() : just after setEnabled" << std::endl;
+    //if (cell == NULL){
+    //  std::cerr << "[ERROR] InstancesWidget::setCellViewer: nullptr" << std::endl;
+    //}
+    //std::cout << "InstancesWidget::setCellViewer() : cellViewer_" << std::endl;
+    //cellViewer_ = cell;
+    //setEnabled(true);
+    //update();
   }
 
   int InstancesWidget::getSelectedRow () const
@@ -51,6 +63,11 @@ namespace Netlist {
     int selectedRow = getSelectedRow();
     if (selectedRow < 0) return;
     cellViewer_->setCell( baseModel_->getModel(selectedRow) );
+  }
+
+  void InstancesWidget::setCell( Cell* cell )
+  { 
+    baseModel_->setCell(cell); 
   }
 
 }

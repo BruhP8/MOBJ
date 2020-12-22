@@ -1,4 +1,5 @@
 #include <QAbstractTableModel>
+#include "Cell.h"
 
 namespace Netlist {
   
