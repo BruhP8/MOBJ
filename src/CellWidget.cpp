@@ -93,10 +93,15 @@ namespace Netlist {
     QRect rect1 = boxToScreenRect(viewport_);
     painter.drawRect( rect1 );
 
-    painter.setPen( QPen( Qt::red, 0) );
-    painter.setBrush( QBrush( Qt::red ) );
-    QRect rect2 = boxToScreenRect(viewport_);
-    painter.drawRect( rect2 );
+    //painter.setPen( QPen( Qt::red, 0) );
+    //painter.setBrush( QBrush( Qt::red ) );
+    //QRect rect2 = boxToScreenRect(viewport_);
+    //painter.drawRect( rect2 );
+    if (cell_->getSymbol()){
+      painter.setPen( QPen( Qt::red, 1 ) );
+      QRect rect2 = boxToScreenRect( cell_->getSymbol()->getBoundingBox() );
+      painter.drawRect( rect2 );
+    }
 
     int frameWidth  = 460;
     int frameHeight = 100;
