@@ -14,6 +14,8 @@
 #include  "Shape.h"
 #include  "ArcShape.h"
 #include  "EllipseShape.h"
+#include  "LineShape.h"
+#include  "TermShape.h"
 #include  "Cell.h"
 #include  "Line.h"
 #include  "Node.h"
@@ -40,8 +42,9 @@ namespace Netlist {
 
 
   CellWidget::CellWidget ( QWidget* parent )
-    : QWidget(parent)
-    , cell_  (NULL)
+    : QWidget   (parent)
+    , cell_     (NULL)
+    , viewport_ (Box(0, 0, 500, 500))
   {
     setAttribute    ( Qt::WA_OpaquePaintEvent );
     setAttribute    ( Qt::WA_NoSystemBackground );
@@ -107,7 +110,7 @@ namespace Netlist {
       painter.setPen( QPen( Qt::blue, 3 ) );
       QRect rect2 = boxToScreenRect( symbol->getBoundingBox() );
       painter.drawRect( rect2 );
-      painter.setPen( QPen( Qt::magenta, 3 ) );
+      painter.setPen( QPen( Qt::darkCyan, 3 ) );
       for( Shape* sh : symbol->getShapes() ){
         QRect rect3 = boxToScreenRect( sh->getBoundingBox() );
 
@@ -119,19 +122,33 @@ namespace Netlist {
                     << " span=" << arcSh->spanAngle() << std::endl;
           //painter.setPen( QPen( Qt::red, 3) );
           //painter.drawRect( rect4 );
-          painter.setPen( QPen( Qt::magenta, 3 ) );
+          //continue;
         }
 
         
-        if (EllipseShape* esh = dynamic_cast<EllipseShape*>(sh)){
+        if (dynamic_cast<EllipseShape*>(sh)){
           painter.setPen( QPen( Qt::darkMagenta, 2 ) );
           painter.drawEllipse( rect3 );
           //painter.setPen( QPen( Qt::magenta, 3 ) );
+          continue;
+        }
+
+        if (LineShape* lsh = dynamic_cast<LineShape*>(sh)){
+          painter.setPen( QPen( Qt::cyan, 2 ) );
+          painter.drawLine( pointToScreenPoint( lsh->startPoint() ),
+                            pointToScreenPoint( lsh->endPoint() ) );
+          continue;
+        }
+
+        if (TermShape* tsh = dynamic_cast<TermShape*>(sh)){
+          painter.setPen( QPen(Qt::magenta, 5) );
+          painter.drawPoint( QPoint(tsh->getX(), tsh->getY()) );
+          continue;
         }
         
         else {
           if (sh){
-            
+            painter.setPen( QPen( Qt::gray, 3 ) );
             painter.drawRect(rect3);
           }
         }
@@ -158,7 +175,7 @@ namespace Netlist {
       return;
 
     switch( event->key() ){
-      case Qt::Key_Up     : goUp();    break;
+      case Qt::Key_Up     : goUp();     break;
       case Qt::Key_Down   : goDown();   break;
       case Qt::Key_Left   : goLeft();   break;
       case Qt::Key_Right  : goRight();  break;
