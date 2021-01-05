@@ -73,7 +73,7 @@ namespace Netlist {
 
   void InstancesWidget::setCell( Cell* cell )
   { 
-    baseModel_->setCell(cell); 
+    baseModel_->setCell(cell);
   }
 
 }
