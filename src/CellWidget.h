@@ -53,9 +53,55 @@ namespace Netlist {
   };
 
 
-  inline Cell* CellWidget::getCell () const { return cell_; }
-  inline QRect CellWidget::boxToScreenRect ( const Box& box ) const 
-  { return QRect( QPoint(box.getX1(), box.getY2()), QPoint(box.getX2(), box.getY1()) ); }
+  inline Cell* CellWidget::getCell            ()        const 
+  { 
+    return cell_;
+  }
+
+  inline int   CellWidget::xToScreenX         ( int x ) const
+  { 
+    return x - viewport_.getX1();
+  }
+
+  inline int   CellWidget::yToScreenY         ( int y ) const
+  {
+    return viewport_.getY2() - y;
+  }
+
+  inline QRect CellWidget::boxToScreenRect    ( const Box& box ) const 
+  { 
+    return QRect( QPoint( xToScreenX(box.getX1()), yToScreenY(box.getY2())), 
+                  QPoint( xToScreenX(box.getX2()), yToScreenY(box.getY1())) ); 
+  }
+
+  inline QPoint CellWidget::pointToScreenPoint( const Point& point ) const
+  { 
+    return QPoint( xToScreenX(point.getX()), yToScreenY(point.getY())); 
+  }
+
+  inline int    CellWidget::screenXToX        ( int x ) const
+  {
+    return x + viewport_.getX1();
+  }
+
+  inline int    CellWidget::screenYToY        ( int y ) const
+  {
+    return viewport_.getY2() - y;
+  }
+
+  inline Box    CellWidget::screenRectToBox   ( const QRect& rect ) const
+  {
+    return Box( screenXToX(rect.x())
+              , screenYToY(rect.y())
+              , screenXToX(rect.width() + rect.x())
+              , screenYToY(rect.height() + rect.y()) );
+  }
+
+  inline Point  CellWidget::screenPointToPoint( const QPoint& point ) const
+  {
+    return Point( screenXToX(point.x())
+                , screenYToY(point.y()) );
+  }
 
 }  // Netlist namespace.
 
