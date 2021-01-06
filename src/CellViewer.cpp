@@ -33,6 +33,7 @@ namespace Netlist
     std::cout << "[CELL_VIEWER] : SaveCellDialog created" << std::endl;
 
     cellsLib_ = new CellsLib(parent);
+    std::cout << "[CELL_VIEWER] : cellsLib created" << std::endl;
     cellsLib_->setCellViewer(this);
 
     std::cout << "[CELL_VIEWER] : cellsLib_->setCellViewer DONE" << std::endl;

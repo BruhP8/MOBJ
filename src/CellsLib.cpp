@@ -11,28 +11,41 @@ namespace Netlist {
   : QWidget( parent )
   , cellViewer_( NULL )
   , baseModel_( NULL )
+  , view_( new QTableView(this) )
+  , load_( new QPushButton(this) )
   {
-    //baseModel_ = new CellsModel( cellViewer_ );
+
+    if (view_ == NULL){
+      std::cerr << "[CELLS_LIB] : error during creation of QTableView" << std::endl;
+      exit(-1);
+    }
+
     //setAttribute( Qt::WA_QuitOnClose,   false );
     //setAttribute( Qt::WA_DeleteOnClose, false );
     //setContextMenuPolicy( Qt::ActionsContextMenu );
 
-    //view_->setShowGrid              ( false );
-    //view_->setAlternatingRowColors  ( true );
-    //view_->setSelectionBehavior     ( QAbstractItemView::SelectRows );
-    //view_->setSelectionMode         ( QAbstractItemView::SingleSelection );
-    //view_->setSortingEnabled        ( true );
-    //view_->setModel                 ( baseModel_ );
+    view_->setShowGrid              ( false );
+    view_->setAlternatingRowColors  ( true );
+    view_->setSelectionBehavior     ( QAbstractItemView::SelectRows );
+    view_->setSelectionMode         ( QAbstractItemView::SingleSelection );
+    view_->setSortingEnabled        ( true );
+    view_->setModel                 ( baseModel_ );
 
-    //QHeaderView* horizontalHeader = view_->horizontalHeader();
-    //horizontalHeader->setDefaultAlignment   ( Qt::AlignHCenter );
-    //horizontalHeader->setMinimumSectionSize ( 300 );
-    //horizontalHeader->setStretchLastSection ( true );
+    QHeaderView* horizontalHeader = view_->horizontalHeader();
+    horizontalHeader->setDefaultAlignment   ( Qt::AlignHCenter );
+    horizontalHeader->setMinimumSectionSize ( 300 );
+    horizontalHeader->setStretchLastSection ( true );
 
-    //QHeaderView* verticalHeader = view_->verticalHeader();
-    //verticalHeader->setVisible( false );
-    //load_->setText( "Load" );
-    //connect( load_, SIGNAL(clicked()), this, SLOT(load()) );
+    std::string wName = "CellsLib";
+    setWindowTitle( QString(wName.c_str()) );
+
+    setMinimumHeight(200);
+    setMinimumWidth(300);
+
+    QHeaderView* verticalHeader = view_->verticalHeader();
+    verticalHeader->setVisible( false );
+    load_->setText( "Load" );
+    connect( load_, SIGNAL(clicked()), this, SLOT(load()) );
     std::cout << "[CELLS_LIB] : Constructor OK" << std::endl;
 
   }
@@ -52,17 +65,18 @@ namespace Netlist {
 
   //TODO
   int CellsLib::getSelectedRow() const {
-    return 0;
+    QModelIndexList selecteds = view_->selectionModel()->selection().indexes();
+
+    if ( selecteds.empty() ) return -1;
+    return selecteds.first().row();
   }
 
   //TODO
   void CellsLib::load() {
-    std::vector<Cell*> cells = cellViewer_->getCell()->getAllCells();
-
-    for(Cell* c : cells){
-      
-    }
-
+    int selectedRow = getSelectedRow();
+    if (selectedRow < 0) return;
+    std::cout << "[CELLSLIB] : loading " << Cell::getAllCells()[selectedRow]->getName() << std::endl;
+    cellViewer_->setCell( Cell::getAllCells()[selectedRow] );
   }
 
 }

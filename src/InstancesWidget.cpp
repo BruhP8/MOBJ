@@ -24,6 +24,10 @@ namespace Netlist {
     view_->setSelectionMode         ( QAbstractItemView::SingleSelection );
     view_->setSortingEnabled        ( true );
     view_->setModel                 ( baseModel_ );
+    //view_->setColumnHidden          ( 0, false );
+    //view_->setColumnHidden          ( 1, false );
+    view_->setColumnWidth           (0, 100);
+    view_->setColumnWidth           (1, 100);
 
     QHeaderView* horizontalHeader = view_->horizontalHeader();
     horizontalHeader->setDefaultAlignment   ( Qt::AlignHCenter );
@@ -35,6 +39,8 @@ namespace Netlist {
 
     std::string wName = "InstancesWidget";
     setWindowTitle( QString(wName.c_str()) );
+    setMinimumWidth(600);
+    setMinimumHeight(200);
 
     load_->setText( "Load" );
     connect( load_, SIGNAL(clicked()), this, SLOT(load()) );

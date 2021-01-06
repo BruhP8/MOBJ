@@ -12,6 +12,8 @@ namespace Netlist {
       CellsModel( QObject* parent=NULL );
      ~CellsModel();
 
+      QVariant data( const QModelIndex& index, int role ) const;
+
     public slots :
       void  updateDatas();
 

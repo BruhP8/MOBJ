@@ -142,7 +142,7 @@ namespace Netlist {
 
         if (TermShape* tsh = dynamic_cast<TermShape*>(sh)){
           painter.setPen( QPen(Qt::magenta, 5) );
-          painter.drawPoint( QPoint(tsh->getX(), tsh->getY()) );
+          painter.drawPoint( QPoint(xToScreenX(tsh->getX()), yToScreenY(tsh->getY())) );
           continue;
         }
         
