@@ -18,7 +18,7 @@ using namespace Netlist;
 
 int main ( int argc, char* argv[] )
 {
-  Cell* halfadder = Cell::load("fulladder");
+  Cell* halfadder = Cell::load("halfadder");
   std::cout << "[MAIN] : Creation of QApplication" << std::endl;
   QApplication* qa = new QApplication(argc, argv);
 

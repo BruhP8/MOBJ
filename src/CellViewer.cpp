@@ -151,7 +151,7 @@ namespace Netlist
       std::cout << "[DONE] CellViewer::openCell() : OpenCellDialog::run() name = " << name.toStdString() << std::endl;
     }
     Cell* cell = NULL;
-    if ( (cell = Cell::find(name.toStdString())) == NULL){
+    if ( not (cell = Cell::find(name.toStdString())) ){
       cell = Cell::load(name.toStdString());
       if (cell == NULL){
         std::cerr << "[ERROR] CellViewer::openCell() : cell not found" << std::endl;
