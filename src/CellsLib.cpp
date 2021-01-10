@@ -1,5 +1,7 @@
 #include <iostream>
 #include <QHeaderView>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include "Cell.h"
 #include "CellsModel.h"
 #include "CellViewer.h"
@@ -24,7 +26,7 @@ namespace Netlist {
     //setAttribute( Qt::WA_DeleteOnClose, false );
     //setContextMenuPolicy( Qt::ActionsContextMenu );
 
-    view_->setShowGrid              ( false );
+    view_->setShowGrid              ( true );
     view_->setAlternatingRowColors  ( true );
     view_->setSelectionBehavior     ( QAbstractItemView::SelectRows );
     view_->setSelectionMode         ( QAbstractItemView::SingleSelection );
@@ -44,6 +46,17 @@ namespace Netlist {
 
     QHeaderView* verticalHeader = view_->verticalHeader();
     verticalHeader->setVisible( false );
+
+    QVBoxLayout* vLayout = new QVBoxLayout();
+    vLayout->addWidget( view_ );
+    vLayout->addWidget( load_ );
+
+    QFrame* separator = new QFrame();
+    separator->setFrameShape ( QFrame::VLine );
+    separator->setFrameShadow( QFrame::Sunken );
+
+    setLayout( vLayout );
+
     load_->setText( "Load" );
     connect( load_, SIGNAL(clicked()), this, SLOT(load()) );
     std::cout << "[CELLS_LIB] : Constructor OK" << std::endl;

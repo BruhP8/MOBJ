@@ -10,6 +10,7 @@
 #include <QPoint>
 class QPainter;
 #include "Box.h"
+#include "Symbol.h"
 
 
 namespace Netlist {
@@ -50,20 +51,25 @@ namespace Netlist {
     private:
       Cell* cell_;
       Box   viewport_;
+
+    private:
+              void    query               ( unsigned int, QPainter& );
+              void    drawCellsSymbol     ( unsigned int, QPainter& );
+              void    drawNets            ( QPainter& );
   };
 
 
-  inline Cell* CellWidget::getCell            ()        const 
+  inline Cell* CellWidget::getCell        ()        const 
   { 
     return cell_;
   }
 
-  inline int   CellWidget::xToScreenX         ( int x ) const
+  inline int   CellWidget::xToScreenX     ( int x ) const
   { 
     return x - viewport_.getX1();
   }
 
-  inline int   CellWidget::yToScreenY         ( int y ) const
+  inline int   CellWidget::yToScreenY     ( int y ) const
   {
     return viewport_.getY2() - y;
   }

@@ -49,7 +49,7 @@ namespace Netlist {
   {
     TermShape* tsh = NULL;
 
-    cout << "TermShape::fromXml()" << endl;
+    //cout << "TermShape::fromXml()" << endl;
 
     const xmlChar* termTag  = xmlTextReaderConstString    ( reader, (const xmlChar*)"term" );
     const xmlChar* nodeName = xmlTextReaderConstLocalName ( reader );
@@ -95,7 +95,7 @@ namespace Netlist {
 
       tsh = new TermShape(symb, termName, x, y, align);
 
-      cout << "-- new TermShape created !" << endl;
+      //cout << "-- new TermShape created !" << endl;
     }
     else {
       cerr << "[ERROR] Term::fromXml() : not in <term> but <" << nodeName << ">" << endl;

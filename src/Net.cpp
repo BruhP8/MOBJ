@@ -177,7 +177,7 @@ namespace Netlist {
 
   Net* Net::fromXml ( Cell* cell, xmlTextReaderPtr reader )
   {
-    cout << "Beginning of Net::fromXml()" << endl;
+    //cout << "Beginning of Net::fromXml()" << endl;
     
     const xmlChar* netTag  = xmlTextReaderConstString( reader, (const xmlChar*)"net"  );
     const xmlChar* nodeTag = xmlTextReaderConstString( reader, (const xmlChar*)"node" );

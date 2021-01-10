@@ -35,7 +35,7 @@ namespace Netlist {
    * - Suppression du Point correspondant à la position de l'Instance *
    * STATUS   --   DONE                                               *
    *------------------------------------------------------------------*/
-  Instance::~Instance  ()
+  Instance::~Instance ()
   {
     owner_      -> remove(this);
     masterCell_ -> remove(this);
@@ -119,7 +119,7 @@ namespace Netlist {
      * 3- et on déplace le Term */
     for(Term* t : terms_){
       Point pos = owner_->getSymbol()->getTermPosition(t);
-      pos.translate(p.getX(), p.getY());
+      pos.translate(position_);
       t->setPosition(pos);
     }
     
@@ -183,7 +183,7 @@ namespace Netlist {
     cout << "MasterCell : " << cellName << endl;
     Cell* masterCell = Cell::find(cellName);
     if (masterCell == NULL){
-      //cerr << "[ERROR] Instance::fromXml(): no masterCell " << cellName << " found" << endl;
+      cerr << "[ERROR] Instance::fromXml(): no masterCell " << cellName << " found" << endl;
       cout << "[SOLUTION] Instance::fromXml(): try to load " << cellName << endl;
       masterCell = Cell::load( cellName );
       if (masterCell == NULL){

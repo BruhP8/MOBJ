@@ -25,6 +25,8 @@ namespace Netlist {
   }
 
   int InstancesModel::rowCount( const QModelIndex& parent ) const {
+    if (not cell_){ std::cerr << "[INSTANCES_MODEL] : rowCount no Cell" << std::endl; }
+    if (cell_ and (cell_->getInstances().size() == 0)){ std::cout << "[INSTANCE_MODEL] rowCount : no Instances" << std::endl; }
     return (cell_) ? cell_->getInstances().size() : 0;
   }
 
@@ -32,11 +34,16 @@ namespace Netlist {
     return 2;
   }
 
+  /*------------------------------------------------------------------*
+   * Méthode InstancesModel::data                                     *
+   * -                *
+   * STATUS   --  TODO                                                *
+   *------------------------------------------------------------------*/  
   QVariant InstancesModel::data( const QModelIndex& index, int role ) const {
     if (not cell_ or not index.isValid()) return QVariant();
     if (role == Qt::DisplayRole) {
       int row = index.row();
-      switch ( index.column() ) {
+      switch ( index.column() ) { 
         case 0: return cell_->getInstances()[row]->getName().c_str();
         case 1: return cell_->getInstances()[row]
                             ->getMasterCell()->getName().c_str();

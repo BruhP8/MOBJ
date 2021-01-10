@@ -7,17 +7,13 @@
 
 #include <iostream>
 #include "Node.h"
-//#include "Net.h"
 #include "Cell.h"
 #include "Point.h"
 #include "Instance.h"
 
 namespace Netlist {
   
-  //class Node;  
   class Net;
-  //class Instance;
-  //class Cell;
   
   class Term {
     

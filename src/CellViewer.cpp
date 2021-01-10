@@ -27,30 +27,18 @@ namespace Netlist
     std::cout << "[CELL_VIEWER] : Beginning of constructor" << std::endl;
 
     cellWidget_ = new CellWidget();
-    std::cout << "[CELL_VIEWER] : CellWidget created" << std::endl;
-
     saveCellDialog_ = new SaveCellDialog( this );
-    std::cout << "[CELL_VIEWER] : SaveCellDialog created" << std::endl;
-
     cellsLib_ = new CellsLib(parent);
-    std::cout << "[CELL_VIEWER] : cellsLib created" << std::endl;
     cellsLib_->setCellViewer(this);
-
-    std::cout << "[CELL_VIEWER] : cellsLib_->setCellViewer DONE" << std::endl;
-
     instancesWidget_= new InstancesWidget(parent);
     instancesWidget_->setCellViewer(this);
-
-    std::cout << "[CELL_VIEWER] : First Part DONE" << std::endl;
 
     setCentralWidget( cellWidget_ );
     QMenu* fileMenu = menuBar()->addMenu( "&File" );
 
-    std::cout << "[CELL_VIEWER] : Second part (Creation of QMenu) DONE" << std::endl;
-
     QAction* action = new QAction( "&Open Cell", this );
     action->setStatusTip( "Open selected Cell ");
-    action->setShortcut( QKeySequence("CTRL+C") );
+    action->setShortcut( QKeySequence("CTRL+O") );
     action->setVisible( true );
     fileMenu->addAction( action );
     connect( action, SIGNAL(triggered()), this, SLOT(openCell()) );
@@ -84,10 +72,6 @@ namespace Netlist
     connect( action, SIGNAL(triggered()), this, SLOT(showInstancesWidget()) );
     
     std::cout << "[CELL_VIEWER] : End of constructor" << std::endl;
-    
-    //QObject::connect( this, SIGNAL(cellLoaded()), this, SLOT(cellsLib_->getBaseModel()->updateDatas()) );
-
-    //action = new QAction( "&CellLoaded", this );
   }
 
 
@@ -130,12 +114,13 @@ namespace Netlist
   /*------------------------------------------------------------------*
    * Affectation d'une Cell                                           *
    * - Appelle la méthode setCell de CellWidget                       *
+   * - Appelle la méthode setCell d'InstanceWidget                    *
    * STATUS   --  DONE                                                *
    *------------------------------------------------------------------*/
   void CellViewer::setCell ( Cell* cell )
   {
     cellWidget_->setCell(cell);
-
+    instancesWidget_->setCell(cell);
   }
 
   /*------------------------------------------------------------------*
@@ -166,7 +151,9 @@ namespace Netlist
 
   void CellViewer::showCellsLib()
   {
+    std::cout << "[BEFORE] CellViewer::showCellsLib: show()" << std::endl;
     cellsLib_->show();
+    std::cout << "[AFTER]  CellViewer::showCellsLib: show()" << std::endl;
     update();
   }
 
@@ -174,7 +161,7 @@ namespace Netlist
   {
     std::cout << "[BEFORE] CellViewer::showInstancesWidget: show()" << std::endl;
     instancesWidget_->show();
-    std::cout << "[AFTER] CellViewer::showInstancesWidget: show()" << std::endl;
+    std::cout << "[AFTER]  CellViewer::showInstancesWidget: show()" << std::endl;
     update();
   }
 

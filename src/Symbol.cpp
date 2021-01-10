@@ -62,7 +62,6 @@ namespace Netlist {
         }
       }
     }
-    cout << "[Warning] Symbol::getTermPosition() : nothing happened" << endl;
     return Point(-1, -1);
   }
 
@@ -127,7 +126,7 @@ namespace Netlist {
 
     while(xmlTextReaderNodeType( reader ) != XML_READER_TYPE_END_ELEMENT){
 
-      std::cout << "--Symbol::fromXml() : While Loop (construction of Shapes)" << std::endl;
+      //std::cout << "--Symbol::fromXml() : While Loop (construction of Shapes)" << std::endl;
 
       int status = xmlTextReaderRead(reader);
       if (status != 1) {
@@ -151,7 +150,7 @@ namespace Netlist {
         break;
       }
 
-      cout << "-- Symbol::fromXml() : " << nodeName << endl;
+      //cout << "-- Symbol::fromXml() : " << nodeName << endl;
 
       Shape* sh = Shape::fromXml(symbol, reader);
 
@@ -159,7 +158,7 @@ namespace Netlist {
         cerr << "[ERROR] Symbol::fromXml() calling Shape::fromXml()" << endl;
       } else {
         symbol -> add(sh);
-        cout << "C'est OK" << endl;
+        //cout << "C'est OK" << endl;
       }
 
     }

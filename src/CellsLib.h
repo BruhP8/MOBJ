@@ -15,9 +15,9 @@ namespace Netlist {
     public :
                           CellsLib        ( QWidget* parent=NULL );
                          ~CellsLib        ();
-      void                setCellViewer   ( CellViewer* );
-      int                 getSelectedRow  () const;
-      inline CellsModel*  getBaseModel    ();
+              void        setCellViewer   ( CellViewer* );
+              int         getSelectedRow  () const;
+      inline  CellsModel* getBaseModel    ();
     
     public slots :
       void                load            ();
@@ -27,6 +27,7 @@ namespace Netlist {
       CellsModel*   baseModel_;
       QTableView*   view_;
       QPushButton*  load_;
+
   };
 
   inline CellsModel* CellsLib::getBaseModel() { return baseModel_; }
