@@ -32,7 +32,7 @@ namespace Netlist {
 
   Cell* Cell::load ( const string& cellName )
   {
-    string           cellFile = "./cells/" + cellName + ".xml";
+    string           cellFile = "../src/cells/" + cellName + ".xml";
     xmlTextReaderPtr reader;
 
     cerr << "Loading <" << cellFile << ">" << endl;
